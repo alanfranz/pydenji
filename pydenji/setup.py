@@ -14,7 +14,7 @@ setup(name='pydenji',
 
       Small additional tools to help with configuration management are provided
       and can be used when and where are really fit.
-      """
+      """,
       author='Alan Franzoni',
       license='APL 2.0',
       keywords='dependency injection inversion control ioc container',
