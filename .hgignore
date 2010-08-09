@@ -8,4 +8,6 @@ develop-eggs
 .installed.cfg
 bin
 *.swp
+pydenji/build
+pydenji/dist
 
