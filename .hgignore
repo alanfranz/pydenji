@@ -1,0 +1,11 @@
+syntax: glob
+nbproject/private
+*.pyc
+*.pyo
+eggs
+develop-eggs
+*.egg-info
+.installed.cfg
+bin
+*.swp
+
