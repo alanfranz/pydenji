@@ -4,7 +4,7 @@
 
 from unittest import TestCase
 
-from pydenji.config.composite import CompositeConfig
+from pydenji.config.composite import CompositeConfig, NamingClashException
 from pydenji.config.pythonconfig import prototype, singleton
 
 class FirstConfig(object):
@@ -17,6 +17,11 @@ class SecondConfig(object):
     def second(self):
         return 2
 
+class SecondBisConfig(object):
+    @singleton
+    def second(self):
+        return 3
+
 class TestCompositeConfig(TestCase):
 
     def test_composite_config_merges_input_configs(self):
@@ -28,6 +33,12 @@ class TestCompositeConfig(TestCase):
 
         self.assertEquals(1, composite.first())
         self.assertEquals(2, composite.second())
+
+    def test_composite_config_raises_error_if_name_clash_occurs(self):
+        first = SecondConfig()
+        second = SecondBisConfig()
+
+        self.assertRaises(NamingClashException, CompositeConfig, (first, second))
 
 
 
