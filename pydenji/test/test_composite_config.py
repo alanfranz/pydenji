@@ -27,7 +27,6 @@ class TestCompositeConfig(TestCase):
     def test_composite_config_merges_input_configs(self):
         first = FirstConfig()
         second = SecondConfig()
-        second.second()
         
         composite = CompositeConfig((first, second))
 
