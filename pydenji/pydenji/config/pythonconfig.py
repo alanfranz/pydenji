@@ -43,7 +43,8 @@ def singleton(func, eager=True):
 singleton.lazy = partial(singleton, eager=False)
 
 def prototype(func):
-    f = partial(func)
+    def f(*args, **kwargs):
+        return func(*args, **kwargs)
     setattr(f, _CONFIGURED_OBJECT_FACTORY, True)
     setattr(f, _INSTANTIATE_EAGERLY, False)
     return f

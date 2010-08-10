@@ -35,6 +35,23 @@ class TestConfig(TestCase):
         self.conf = Configuration(Simple, config_recorder.append)
         self.assert_(not config_recorder)
 
+    def test_prototype_factory_works_without_parameters(self):
+        class Prototypal(object):
+            @prototype
+            def factory(self):
+                return 1
+
+        conf = Prototypal()
+        conf.factory()
+
+    def test_lazy_factory_works_without_parameters(self):
+        class Lazy(object):
+            @singleton.lazy
+            def factory(self):
+                return 1
+
+        conf = Lazy()
+        conf.factory()
 
 class TestScopeDecorators(TestCase):
     def setUp(self):
