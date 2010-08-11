@@ -15,7 +15,7 @@ class CompositeConfig(object):
         # this resembles appcontext method.
         # TODO: check whether we could refactor it someway.
         for config in configs:
-            for attr in dir(config):
+            for attr in (attr for attr in dir(config) if not attr.startswith("_")):
                 value = getattr(config, attr)
                 if is_object_factory(value):
                     # check naming clashes.

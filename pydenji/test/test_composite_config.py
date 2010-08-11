@@ -22,6 +22,10 @@ class SecondBisConfig(object):
     def second(self):
         return 3
 
+    @prototype
+    def _private(self):
+        return 1
+
 class TestCompositeConfig(TestCase):
 
     def test_composite_config_merges_input_configs(self):
@@ -39,5 +43,12 @@ class TestCompositeConfig(TestCase):
 
         self.assertRaises(NamingClashException, CompositeConfig, (first, second))
 
+    def test_composite_config_doesnt_expose_private_factories(self):
+        first = FirstConfig()
+        second = SecondBisConfig()
+
+        composite = CompositeConfig((first, second))
+
+        self.assertRaises(AttributeError, getattr, composite, "_private")
 
 
