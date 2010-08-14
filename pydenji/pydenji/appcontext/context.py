@@ -4,13 +4,14 @@
 
 from pydenji.config.pythonconfig import is_object_factory, is_eager
 from pydenji.appcontext.aware import is_appcontext_aware
+from pydenji.config.composite import CompositeConfig
 
 class UnconfiguredError(Exception):
     pass
 
 class AppContext(object):
-    def __init__(self, configuration):
-        self._names_factories = self._get_all_factories(configuration)
+    def __init__(self, *configurations):
+        self._names_factories = self._get_all_factories(CompositeConfig(configurations))
         self._start(self._names_factories)
 
     def get_object(self, name, *args, **kwargs):

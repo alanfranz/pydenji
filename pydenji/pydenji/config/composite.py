@@ -14,16 +14,23 @@ class CompositeConfig(object):
     def __init__(self, configs):
         # this resembles appcontext method.
         # TODO: check whether we could refactor it someway.
+        # TODO: cyclomatic complexity is increasing dramatically in this method.
+        # we'll need to split it into smaller pieces someday.
         for config in configs:
-            for attr in (attr for attr in dir(config) if not attr.startswith("_")):
+            for attr in dir(config):
                 value = getattr(config, attr)
                 if is_object_factory(value):
-                    # check naming clashes.
-                    if getattr(self, attr, None) is not None:
-                        # TODO: it would probably be good to know
-                        # where it was configured.
-                        raise NamingClashException(attr, config)
-                    setattr(self, attr, value)
+                    if not attr.startswith("_"):
+                        # public factory, check for naming clashes.
+                        if getattr(self, attr, None) is not None:
+                            # TODO: it would probably be good to know
+                            # where it was configured.
+                            raise NamingClashException(attr, config)
+                        setattr(self, attr, value)
+                    else:
+                        # private factory, prevent naming clashes.
+                        setattr(self, "_pydenji__conf_" + config.__class__.__name__, value)
+
 
         
     
