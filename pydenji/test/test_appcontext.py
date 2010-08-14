@@ -4,7 +4,7 @@
 
 from unittest import TestCase
 
-from pydenji.appcontext import AppContext
+from pydenji.appcontext import AppContext, is_appcontext_aware
 from pydenji.config.pythonconfig import singleton
 from pydenji.config.pythonconfig import Configuration
 
@@ -45,6 +45,26 @@ class TestAppContext(TestCase):
         conf = MockConf()
         context = AppContext(conf)
         self.assertEquals([], c)
+
+    def test_appcontext_gets_injected_on_aware_objects(self):
+        # TODO: think whether we need to use an ABC instead or as well.
+        class AppAwareObject(object):
+            app_context = None
+            
+            def set_app_context(self, context):
+                self.app_context = context
+
+        @Configuration
+        class MockConf(object):
+            @singleton
+            def appcontextaware(self):
+                return AppAwareObject()
+
+
+        context = AppContext(MockConf())
+        aware = context.get_object("appcontextaware")
+        self.assertTrue(context is aware.app_context, "context wasn't injected correctly!")
+
 
 
 
