@@ -45,18 +45,23 @@ class TestAppContext(TestCase):
 
 
     def test_appcontext_fetches_objects_eagerly_when_required(self):
-        c = []
+        c = set()
         @Configuration
         class MockConf(object):
             @singleton
             def something(self):
-                c.append(True)
+                c.add("something")
+
+            @singleton
+            def _private(self):
+                c.add("private")
              
 
         conf = MockConf()
         context = AppContext(conf)
-        self.assertEquals([True], c)
+        self.assertEquals(set(["something", "private"]), c)
 
+        
     def test_appcontext_fetches_objects_lazily_when_required(self):
         c = []
         @Configuration
