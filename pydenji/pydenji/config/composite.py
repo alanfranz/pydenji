@@ -29,7 +29,7 @@ class CompositeConfig(object):
                         setattr(self, attr, value)
                     else:
                         # private factory, prevent naming clashes.
-                        setattr(self, "_pydenji__conf_" + config.__class__.__name__, value)
+                        setattr(self, "_pydenji__%s_%s" % (config.__class__.__name__, attr), value)
 
 
         
