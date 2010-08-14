@@ -5,6 +5,8 @@
 from functools import partial
 from types import UnboundMethodType
 
+from pydenji.appcontext.aware import is_appcontext_aware
+
 _CONFIGURED_OBJECT_FACTORY = "_pydenji__CONFIGURED_OBJECT_FACTORY"
 _INSTANTIATE_EAGERLY = "_pydenji__INSTANTIATE_EAGERLY"
 
@@ -49,7 +51,7 @@ def prototype(func):
     setattr(f, _INSTANTIATE_EAGERLY, False)
     return f
 
-def Configuration(cls, configure_with=singleton):
+def Configuration(cls, configure_with=singleton, suffix="Configuration"):
     """
     Makes all public, unwrapped methods *eager singletons* by default.
     Also, after instantiation a "params" instance attribute will be set -
@@ -62,11 +64,42 @@ def Configuration(cls, configure_with=singleton):
         attrvalue = getattr(cls, clsattr)
         if (not clsattr.startswith("_")) and isinstance(attrvalue, UnboundMethodType) and not is_object_factory(attrvalue):
             configured_dict[clsattr] = configure_with(attrvalue)
-    return type(cls.__name__ + "Configuration", (cls, ), configured_dict)
+    return type(cls.__name__ + suffix, (cls, ), configured_dict)
 
-def GlobalConfiguration(cls, configure_with=singleton):
+def GlobalConfiguration(cls, configure_with=singleton, suffix="GlobalConfiguration"):
     """
     Just like Configuration, but any unfound factory will be looked up in the app context.
     """
-    ConfigClass = Configuration(cls, configure_with)
+    ConfigClass = Configuration(cls, configure_with, suffix)
+    # it might be appcontext aware but we
+    # could not detect it without ABCs...
+    # TODO: think about that.
+    if is_appcontext_aware(ConfigClass):
+        # just return it, it's already got whatever it needs. (maybe?)
+        # TODO: let's think if this can do any harm.
+        return ConfigClass
+
+    configured_dict = {}
+
+    def set_app_context(self, context):
+        self._pydenji__APPCONTEXT = context
+
+    configured_dict["set_app_context"] = set_app_context
+    
+    def __getattr__(self, attr):
+        try:
+            return self._pydenji__APPCONTEXT.get_object(attr)
+        except:
+            # TODO: better error interception! just intercept what we
+            # need to handle.
+            raise AttributeError, "'%s' object has no attribute '%s'" % (self, attr)
+
+    configured_dict["__getattr__"] = __getattr__
+    
+    return type(cls.__name__ + suffix, (cls, ), configured_dict)
+
+
+
+
+
 

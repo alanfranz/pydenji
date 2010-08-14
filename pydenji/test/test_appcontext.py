@@ -6,7 +6,7 @@ from unittest import TestCase
 
 from pydenji.appcontext import AppContext, is_appcontext_aware
 from pydenji.config.pythonconfig import singleton
-from pydenji.config.pythonconfig import Configuration
+from pydenji.config.pythonconfig import Configuration, GlobalConfiguration
 
 class TestAppContext(TestCase):
     def test_appcontext_allows_retrieving_by_name(self):
@@ -66,6 +66,22 @@ class TestAppContext(TestCase):
         self.assertTrue(context is aware.app_context, "context wasn't injected correctly!")
 
 
+class TestGlobalConfig(TestCase):
+    def test_global_config_falls_back_on_appcontext_factories(self):
+        
+        class One(object):
+            def one(self):
+                return 1
+            
+        class Other(object):
+            def other(self):
+                return 2
+
+        GlobalConf = GlobalConfiguration(Simple)()
+        OtherConf = Configuration(Other)()
+        context = AppContext()
+
+        self.assert_(Simple.public in config_recorder)
 
 
 

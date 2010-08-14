@@ -3,9 +3,17 @@
 
 from unittest import TestCase
 
-from pydenji.config.pythonconfig import Configuration, prototype, singleton
+from pydenji.config.pythonconfig import Configuration, prototype, singleton, GlobalConfiguration
 from pydenji.config.pythonconfig import is_object_factory, is_eager, _CONFIGURED_OBJECT_FACTORY
 
+class TestGlobalConfig(TestCase):
+    def test_global_config_falls_back_on_appcontext_factories(self):
+        config_recorder = []
+        class Simple(object):
+            def public(self):
+                pass
+        self.conf = Configuration(Simple, config_recorder.append)
+        self.assert_(Simple.public in config_recorder)
 
 class TestConfig(TestCase):
     def test_config_configures_undecorated_public_methods(self):
