@@ -3,12 +3,7 @@
 # (C) 2010 Alan Franzoni.
 
 from pydenji.config.pythonconfig import is_object_factory, is_eager
-
-def is_appcontext_aware(obj):
-    # TODO: should we check for callability as well?
-    if getattr(obj, "set_app_context", None) is not None:
-        return True
-    return False
+from pydenji.appcontext.aware import is_appcontext_aware
 
 class UnconfiguredError(Exception):
     pass

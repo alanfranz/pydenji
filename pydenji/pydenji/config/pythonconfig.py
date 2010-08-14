@@ -63,3 +63,10 @@ def Configuration(cls, configure_with=singleton):
         if (not clsattr.startswith("_")) and isinstance(attrvalue, UnboundMethodType) and not is_object_factory(attrvalue):
             configured_dict[clsattr] = configure_with(attrvalue)
     return type(cls.__name__ + "Configuration", (cls, ), configured_dict)
+
+def GlobalConfiguration(cls, configure_with=singleton):
+    """
+    Just like Configuration, but any unfound factory will be looked up in the app context.
+    """
+    ConfigClass = Configuration(cls, configure_with)
+
