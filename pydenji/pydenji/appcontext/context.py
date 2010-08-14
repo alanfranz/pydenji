@@ -11,7 +11,9 @@ class UnconfiguredError(Exception):
 
 class AppContext(object):
     def __init__(self, *configurations):
-        self._names_factories = self._get_all_factories(CompositeConfig(configurations))
+        conf = CompositeConfig(configurations)
+        self._names_factories = self._get_all_factories(conf)
+        conf.set_app_context(self)
         self._start(self._names_factories)
 
     def get_object(self, name, *args, **kwargs):
