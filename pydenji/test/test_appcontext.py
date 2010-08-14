@@ -20,6 +20,30 @@ class TestAppContext(TestCase):
         something = context.get_object("something")
         self.assertEquals(1, something)
 
+    def test_appcontext_support_multiple_configs(self):
+        # TODO: this functionality might be overlapping to CompositeConfig.
+        # think about it.
+        
+        @Configuration
+        class MockConf(object):
+            @singleton
+            def something(self):
+                return 1
+
+        @Configuration
+        class OtherConf(object):
+            @singleton
+            def otherthing(self):
+                return 2
+
+        context = AppContext(MockConf(), OtherConf())
+        something = context.get_object("something")
+        self.assertEquals(1, something)
+        otherthing = context.get_object("otherthing")
+        self.assertEquals(2, otherthing)
+
+
+
     def test_appcontext_fetches_objects_eagerly_when_required(self):
         c = []
         @Configuration
