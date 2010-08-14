@@ -95,14 +95,8 @@ class TestAppContext(TestCase):
         self.assertTrue(context is aware.app_context, "context wasn't injected correctly!")
 
     def test_appcontext_gets_injected_on_aware_configuration_objects(self):
-        # TODO: think whether we need to use an ABC instead or as well.
-
-
         @Configuration
         class MockConf(object):
-            @singleton
-            def something(self):
-                return 1
             @dontconfigure
             def set_app_context(self, context):
                 self.app_context = context

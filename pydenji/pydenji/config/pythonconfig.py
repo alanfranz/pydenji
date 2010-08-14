@@ -102,6 +102,7 @@ def GlobalConfiguration(cls, configure_with=singleton, suffix="GlobalConfigurati
 
     configured_dict = {}
 
+    # TODO: do we need to wrap this in a dontconfigure decorator?
     def set_app_context(self, context):
         self._pydenji__app_context = context
 
