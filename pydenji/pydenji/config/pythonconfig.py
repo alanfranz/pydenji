@@ -103,13 +103,13 @@ def GlobalConfiguration(cls, configure_with=singleton, suffix="GlobalConfigurati
     configured_dict = {}
 
     def set_app_context(self, context):
-        self._pydenji__APPCONTEXT = context
+        self._pydenji__app_context = context
 
     configured_dict["set_app_context"] = set_app_context
     
     def __getattr__(self, attr):
         try:
-            return self._pydenji__APPCONTEXT.get_object(attr)
+            return self._pydenji__app_context.get_object(attr)
         except:
             # TODO: better error interception! just intercept what we
             # need to handle.
