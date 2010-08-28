@@ -3,9 +3,17 @@
 
 from unittest import TestCase
 
-from pydenji.config.pythonconfig import Configuration, prototype, singleton
+from pydenji.config.pythonconfig import Configuration, prototype, singleton, GlobalConfiguration, dontconfigure
 from pydenji.config.pythonconfig import is_object_factory, is_eager, _CONFIGURED_OBJECT_FACTORY
 
+class TestGlobalConfig(TestCase):
+    def test_global_config_falls_back_on_appcontext_factories(self):
+        config_recorder = []
+        class Simple(object):
+            def public(self):
+                pass
+        self.conf = Configuration(Simple, config_recorder.append)
+        self.assert_(Simple.public in config_recorder)
 
 class TestConfig(TestCase):
     def test_config_configures_undecorated_public_methods(self):
@@ -14,11 +22,20 @@ class TestConfig(TestCase):
             def public(self):
                 pass
         self.conf = Configuration(Simple, config_recorder.append)
-        self.assert_(Simple.public in config_recorder)
+        self.assert_(Simple.public in config_recorder, "public was not configured.")
 
     def test_config_doesnt_configure_private_methods(self):
         class Simple(object):
             def _private(self):
+                pass
+        config_recorder = []
+        self.conf = Configuration(Simple, config_recorder.append)
+        self.assert_(not config_recorder)
+
+    def test_config_doesnt_configure_dontconfigure_methods(self):
+        class Simple(object):
+            @dontconfigure
+            def public(self):
                 pass
         config_recorder = []
         self.conf = Configuration(Simple, config_recorder.append)

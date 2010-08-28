@@ -4,9 +4,9 @@
 
 from unittest import TestCase
 
-from pydenji.appcontext import AppContext
-from pydenji.config.pythonconfig import singleton
-from pydenji.config.pythonconfig import Configuration
+from pydenji.appcontext import AppContext, is_appcontext_aware
+from pydenji.config.pythonconfig import singleton, dontconfigure
+from pydenji.config.pythonconfig import Configuration, GlobalConfiguration
 
 class TestAppContext(TestCase):
     def test_appcontext_allows_retrieving_by_name(self):
@@ -75,6 +75,56 @@ class TestAppContext(TestCase):
         context = AppContext(conf)
         self.assertEquals([], c)
 
+    def test_appcontext_gets_injected_on_aware_objects(self):
+        # TODO: think whether we need to use an ABC instead or as well.
+        class AppAwareObject(object):
+            app_context = None
+            
+            def set_app_context(self, context):
+                self.app_context = context
+
+        @Configuration
+        class MockConf(object):
+            @singleton
+            def appcontextaware(self):
+                return AppAwareObject()
+
+
+        context = AppContext(MockConf())
+        aware = context.get_object("appcontextaware")
+        self.assertTrue(context is aware.app_context, "context wasn't injected correctly!")
+
+    def test_appcontext_gets_injected_on_aware_configuration_objects(self):
+        @Configuration
+        class MockConf(object):
+            @dontconfigure
+            def set_app_context(self, context):
+                self.app_context = context
+
+        conf = MockConf()
+        context = AppContext(conf)
+        self.assertTrue(context is conf.app_context, "context wasn't injected correctly!")
+
+
+class TestGlobalConfig(TestCase):
+    def test_global_config_falls_back_on_appcontext_factories(self):
+        
+        class One(object):
+            def relies_on_other(self):
+                return self.other() * 2
+            
+        class Other(object):
+            def other(self):
+                return 2
+
+        one = GlobalConfiguration(One)()
+        other = GlobalConfiguration(Other)()
+
+        context = AppContext(one, other)
+        self.assertEquals(4, context.get_object("relies_on_other"))
+
+
+    
 
 
 
