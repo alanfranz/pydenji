@@ -118,7 +118,7 @@ class TestGlobalConfig(TestCase):
                 return 2
 
         one = GlobalConfiguration(One)()
-        other = GlobalConfiguration(Other)()
+        other = Configuration(Other)()
 
         context = AppContext(one, other)
         self.assertEquals(4, context.get_object("relies_on_other"))
