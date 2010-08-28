@@ -20,7 +20,7 @@ class TestAppContext(TestCase):
         something = context.get_object("something")
         self.assertEquals(1, something)
 
-    def test_appcontext_support_multiple_configs(self):
+    def test_appcontext_supports_multiple_configs(self):
         # TODO: this functionality might be overlapping to CompositeConfig.
         # think about it.
         
