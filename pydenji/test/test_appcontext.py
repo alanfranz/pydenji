@@ -106,23 +106,25 @@ class TestAppContext(TestCase):
         self.assertTrue(context is conf.app_context, "context wasn't injected correctly!")
 
 
-
 class TestGlobalConfig(TestCase):
-    def donttest_global_config_falls_back_on_appcontext_factories(self):
+    def test_global_config_falls_back_on_appcontext_factories(self):
         
         class One(object):
-            def one(self):
-                return 1
+            def relies_on_other(self):
+                return self.other() * 2
             
         class Other(object):
             def other(self):
                 return 2
 
-        GlobalConf = GlobalConfiguration(Simple)()
-        OtherConf = Configuration(Other)()
-        context = AppContext()
+        one = GlobalConfiguration(One)()
+        other = GlobalConfiguration(Other)()
 
-        self.assert_(Simple.public in config_recorder)
+        context = AppContext(one, other)
+        self.assertEquals(4, context.get_object("relies_on_other"))
+
+
+    
 
 
 

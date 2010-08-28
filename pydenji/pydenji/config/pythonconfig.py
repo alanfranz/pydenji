@@ -107,18 +107,19 @@ def GlobalConfiguration(cls, configure_with=singleton, suffix="GlobalConfigurati
         self._pydenji__app_context = context
 
     configured_dict["set_app_context"] = set_app_context
+    configured_dict["_pydenji__app_context"] = None
     
     def __getattr__(self, attr):
         try:
-            return self._pydenji__app_context.get_object(attr)
+            return lambda *args, **kwargs: self._pydenji__app_context.get_object(attr, *args, **kwargs)
         except:
             # TODO: better error interception! just intercept what we
             # need to handle.
-            raise AttributeError, "'%s' object has no attribute '%s'" % (self, attr)
+            raise KeyError, "'%s' object has no attribute '%s'" % (self, attr)
 
     configured_dict["__getattr__"] = __getattr__
     
-    return type(cls.__name__ + suffix, (cls, ), configured_dict)
+    return type(cls.__name__ + suffix, (ConfigClass, ), configured_dict)
 
 
 

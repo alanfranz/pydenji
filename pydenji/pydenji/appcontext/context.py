@@ -20,7 +20,7 @@ class AppContext(object):
         try:
             factory = self._names_factories[name]
         except KeyError:
-            raise UnconfiguredError, "No factory was configured for %s" % name
+            raise UnconfiguredError, "No factory was configured for '%s'" % name
         return self._get_instance(factory, *args, **kwargs)
     
     def _start(self, names_factories):
