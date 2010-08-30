@@ -41,7 +41,7 @@ class CompositeConfig(object):
     def set_app_context(self, context):
         for config in self._pydenji__CONFIGURATIONS:
             if is_appcontext_aware(config):
-                config.set_app_context(context)
+                    config.set_app_context(context)
 
 
         

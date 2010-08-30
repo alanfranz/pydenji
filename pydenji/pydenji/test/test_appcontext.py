@@ -5,8 +5,9 @@
 from unittest import TestCase
 
 from pydenji.appcontext import AppContext, is_appcontext_aware
+from pydenji.config.contextconfig import GlobalConfiguration
 from pydenji.config.pythonconfig import singleton, dontconfigure
-from pydenji.config.pythonconfig import Configuration, GlobalConfiguration
+from pydenji.config.pythonconfig import Configuration
 
 class TestAppContext(TestCase):
     def test_appcontext_allows_retrieving_by_name(self):

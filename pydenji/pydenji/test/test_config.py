@@ -3,7 +3,7 @@
 
 from unittest import TestCase
 
-from pydenji.config.pythonconfig import Configuration, prototype, singleton, GlobalConfiguration, dontconfigure
+from pydenji.config.pythonconfig import Configuration, prototype, singleton, dontconfigure
 from pydenji.config.pythonconfig import is_object_factory, is_eager, _CONFIGURED_OBJECT_FACTORY
 
 class TestGlobalConfig(TestCase):
@@ -69,6 +69,7 @@ class TestConfig(TestCase):
 
         conf = Lazy()
         conf.factory()
+
 
 class TestScopeDecorators(TestCase):
     def setUp(self):
