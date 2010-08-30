@@ -1,0 +1,6 @@
+0.2:
+- appcontext aware config objects
+- dynamic importer
+
+0.1:
+- initial release
