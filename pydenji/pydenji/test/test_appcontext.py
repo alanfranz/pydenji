@@ -5,7 +5,7 @@
 from unittest import TestCase
 
 from pydenji.appcontext import AppContext, is_appcontext_aware
-from pydenji.config.contextconfig import GlobalConfiguration
+from pydenji.config.contextconfig import ContextConfiguration
 from pydenji.config.pythonconfig import singleton, dontconfigure
 from pydenji.config.pythonconfig import Configuration
 
@@ -118,7 +118,7 @@ class TestGlobalConfig(TestCase):
             def other(self):
                 return 2
 
-        one = GlobalConfiguration(One)()
+        one = ContextConfiguration(One)()
         other = Configuration(Other)()
 
         context = AppContext(one, other)

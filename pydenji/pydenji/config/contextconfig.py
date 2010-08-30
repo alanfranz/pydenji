@@ -18,7 +18,7 @@ def _getattr(self, attr):
         # need to handle.
         raise KeyError, "'%s' object has no attribute '%s'" % (self, attr)
 
-def GlobalConfiguration(cls, configure_with=singleton, suffix="GlobalConfiguration"):
+def ContextConfiguration(cls, configure_with=singleton, suffix="GlobalConfiguration"):
     """
     Just like Configuration, but any unfound factory will be looked up in the app context.
     """
@@ -33,7 +33,6 @@ def GlobalConfiguration(cls, configure_with=singleton, suffix="GlobalConfigurati
         return ConfigClass
 
     configured_dict = {}
-
 
     configured_dict["set_app_context"] = _set_app_context
     configured_dict["_pydenji__app_context"] = None
