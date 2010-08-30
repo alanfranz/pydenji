@@ -10,8 +10,6 @@ class  TestImporter(unittest.TestCase):
         import os
         self.assertTrue(NI("os.unlink") is os.unlink)
 
-
-
 if __name__ == '__main__':
     unittest.main()
 
