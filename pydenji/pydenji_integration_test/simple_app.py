@@ -18,8 +18,7 @@ class SomeConnector(object):
 
     def connect(self):
         # just mark it did something. # FIXME: Windows support?
-        f = open("/tmp/pydenji_simple_configuration_test_%s" % self.address, "w")
-        f.close()
+        f = open("/tmp/pydenji_simple_configuration_test_%s" % self.address, "w").write("something")
 
 
 class SomeResource(object):

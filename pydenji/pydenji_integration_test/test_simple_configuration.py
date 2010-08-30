@@ -1,7 +1,9 @@
+import os.path
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # (C) 2010 Alan Franzoni
 
+import os
 from .simple_app import *
 
 from pydenji_integration_test.simple_app import SomeNetworkedClass
@@ -31,6 +33,14 @@ class MyRemoteFetchService(object):
 
 
 def run_basic():
-    context = AppContext(MyRemoteFetchService())
 
+    try:
+        os.unlink("/tmp/pydenji_simple_configuration_test_somenetworkaddress")
+    except:
+        pass
+
+    context = AppContext(MyRemoteFetchService())
     network_service = context.get_object("network_service")
+    network_service.performAction()
+    assert os.path.exists("/tmp/pydenji_simple_configuration_test_somenetworkaddress"), "missing file it should be created"
+    os.unlink("/tmp/pydenji_simple_configuration_test_somenetworkaddress")

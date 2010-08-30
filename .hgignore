@@ -10,4 +10,5 @@ bin
 *.swp
 pydenji/build
 pydenji/dist
+parts
 
