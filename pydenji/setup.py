@@ -20,5 +20,5 @@ setup(name='pydenji',
       keywords='dependency injection inversion control ioc container',
       author_email='username@franzoni.eu',
       url='http://pydenji.franzoni.eu',
-      packages=find_packages(exclude=["test"])
+      packages=find_packages(exclude=["test", "pydenji_integration_test"])
      )
