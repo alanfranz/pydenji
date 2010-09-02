@@ -4,6 +4,29 @@
 
 
 import sys
+from importlib import import_module
+
+def import_or_reload(module_name):
+    if module_name in sys.modules:
+        reload(sys.modules[module_name])
+    else:
+        import_module(module_name)
+    return sys.modules[module_name]
+
+
+def get_by_fqdn(object_full_path, _module_import=import_or_reload):
+    """
+    @param object_full_path: string like package.module:Class.function
+    While this is not as powerful as namedAny, it allows for reloading.
+    """
+    module_name, factory_name = object_full_path.split(":", 1)
+    module = _module_import(module_name)
+
+    latest_part = module
+    for part_name in factory_name.split("."):
+        latest_part = getattr(latest_part, part_name)
+    return latest_part
+
 
 # direct import from the Twisted project http://www.twistedmatrix.com
 class _NoModuleFound(Exception):
