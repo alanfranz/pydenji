@@ -1,8 +1,9 @@
 from setuptools import setup, find_packages
 
 setup(name='pydenji',
-      version='0.1',
+      version='0.3',
       description='Dependency Injection Toolkit',
+      install_requires=["importlib", "configobj"],
       long_description="""
       Dependency Injection Toolkit.
 
