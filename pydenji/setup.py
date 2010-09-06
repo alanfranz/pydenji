@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(name='pydenji',
-      version='0.2',
+      version='0.2.1',
       description='Dependency Injection Toolkit',
       long_description="""
       Dependency Injection Toolkit.
