@@ -1,2 +1,3 @@
-__author__="alan"
-__date__ ="$Sep 11, 2010 2:15:55 PM$"
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# (C) 2010 Alan Franzoni.
