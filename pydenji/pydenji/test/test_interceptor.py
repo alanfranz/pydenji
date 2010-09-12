@@ -13,8 +13,8 @@ class TestInterception(unittest.TestCase):
         def method(self, value):
             return self.arg + value
 
-    # TODO: check class vs instance interception.
-    # TODO: split this test into multiple tests!
+
+    # TODO: split those tests into multiple tests!
     def test_init_interception(self):
         def init_interceptor(context):
             self.assertRaises(AttributeError, getattr, context.instance, "arg")

@@ -11,6 +11,8 @@ Evaluate different solutions (aspyct, pyaop) for everyday use.
 
 This system uses dynamic subclassing. Original classes are untouched.
 """
+# TODO: check class vs instance interception. -> are classmethods intercepted correctly?
+# TODO: let interception not to depend on our context object, but use standard function args?
 
 class _Context(object):
     def __init__(self, instance, method, args, kwargs):
