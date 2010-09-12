@@ -72,7 +72,7 @@ def _to_be_configured(clsattr, attrvalue):
         not is_object_factory(attrvalue) and
         should_be_configured(attrvalue))
 
-def Configuration(cls, configure_with=singleton, suffix="Configuration"):
+def Configuration(cls, configure_with=singleton, suffix=""):
     """
     Makes all public, unwrapped methods *eager singletons* by default.
     Also, after instantiation a "params" instance attribute will be set -

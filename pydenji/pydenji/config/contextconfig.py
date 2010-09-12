@@ -18,7 +18,7 @@ def _getattr(self, attr):
         # need to handle.
         raise KeyError, "'%s' object has no attribute '%s'" % (self, attr)
 
-def ContextConfiguration(cls, configure_with=singleton, suffix="GlobalConfiguration"):
+def ContextConfiguration(cls, configure_with=singleton, suffix=""):
     """
     Just like Configuration, but any unfound factory will be looked up in the app context.
     """
