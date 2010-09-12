@@ -28,4 +28,15 @@ class TestInterception(unittest.TestCase):
         self.assertEquals(5, test_obj.other_arg)
 
 
+    def test_method_interception(self):
+        def method_interceptor(context):
+            value = context.proceed()
+            return value * 4
+
+        intercepted = intercept(self.MyTestClass, "method", method_interceptor)
+        test_obj = intercepted(3)
+        self.assertEquals((3 + 5) * 4, test_obj.method(5))
+
+
+
 
