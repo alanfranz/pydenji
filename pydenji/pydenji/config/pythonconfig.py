@@ -83,22 +83,22 @@ def _configure_with(cls, configure_with):
             configured_dict[clsattr] = configure_with(attrvalue)
     return configured_dict
 
-_NO_VALUE = object()
-
-def _get_propsetter_intercepted(cls):
-    def propsetter_init_interceptor(context):
-        context.proceed()
-        instance = context.instance
-
-        #TODO: think twice. Is this a good way to do it? maybe ast parsing would be FAR better.
-        # something explict to require properties...
-
-        required_properties = getattr(instance, "required_properties")
-        for propname in required_properties:
-            if getattr(instance, propname,  _NO_VALUE) is _NO_VALUE:
-                setattr(instance, propname, Placeholder(propname))
-
-    return intercept(cls, "__init__", propsetter_init_interceptor)
+#_NO_VALUE = object()
+#
+#def _get_propsetter_intercepted(cls):
+#    def propsetter_init_interceptor(context):
+#        context.proceed()
+#        instance = context.instance
+#
+#        #TODO: think twice. Is this a good way to do it? maybe ast parsing would be FAR better.
+#        # something explict to require properties...
+#
+#        required_properties = getattr(instance, "required_properties")
+#        for propname in required_properties:
+#            if getattr(instance, propname,  _NO_VALUE) is _NO_VALUE:
+#                setattr(instance, propname, Placeholder(propname))
+#
+#    return intercept(cls, "__init__", propsetter_init_interceptor)
 
 def Configuration(cls, configure_with=singleton, suffix=""):
     """
@@ -116,12 +116,7 @@ def Configuration(cls, configure_with=singleton, suffix=""):
     Non-public methods and already-wrapped methods will just go untouched.
     """
     configured_dict = _configure_with(cls, configure_with)
-
-    # cls = _get_propsetter_intercepted(cls)
-
-
     cls_type = type(cls)
-
     return cls_type(cls.__name__ + suffix, (cls, ), configured_dict)
 
 
