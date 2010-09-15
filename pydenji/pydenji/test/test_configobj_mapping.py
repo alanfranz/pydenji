@@ -4,6 +4,7 @@
 
 import unittest
 from pydenji.userproperties.mapping import map_properties_to_obj, ConfigObjPropertyMapper
+from pydenji.userproperties.mapping import inject_properties_from
 
 
 class  Test_configobj_mappingTestCase(unittest.TestCase):
@@ -61,12 +62,23 @@ class  Test_configobj_mappingTestCase(unittest.TestCase):
         class MockConfig(object):
             property1 = 1
 
-        print MockConfig.__name__
-
+        
         config = ConfigObjPropertyMapper(
         ["[MockConfig]", "property1=123"]
         )(MockConfig)()
         self.assertEquals(123, config.property1)
+
+    def test_property_injection(self):
+        class MockConfig(object):
+            def __init__(self, props):
+                self.props = props
+
+        config = inject_properties_from(["[MockConfig]", "property1=123"])(MockConfig)()
+        self.assertEquals(123, config.props.property1)
+
+
+
+
 
 
 
