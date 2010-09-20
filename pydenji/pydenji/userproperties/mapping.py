@@ -33,19 +33,19 @@ class ConfigObjPropertyMapper(object):
         return config_cls
 
 class inject_properties_from(object):
-    def __init__(self, configobj_source, target_attribute="props"):
+    def __init__(self, configobj_source, target_kwarg="props"):
         self._co = ConfigObj(configobj_source, unrepr=True)
-        self._target = target_attribute
+        self._target = target_kwarg
         
     def __call__(self, config_cls):
         
         original_init = config_cls.__init__
         def new_init(new_self, *args, **kwargs):
-            # if a props kw argument is supplied, it must be userproperties-compatible, e.g. it should support setattr.
-            # WARNING: if strange names are defined for properties, python getattr might not work. maybe a dict-like behaviour
-            # would be better?
-            props = kwargs.setdefault(self._target, UserProperties())
-            props.update(self._co[config_cls.__name__])
+            # do we need to do something like an override?
+            if self._target in kwargs:
+                raise ValueError, "'%s' kw args was supplied already!"
+            props = UserProperties(self._co[config_cls.__name__])
+            kwargs[self._target] = props
             original_init(new_self, *args, **kwargs)
 
 
