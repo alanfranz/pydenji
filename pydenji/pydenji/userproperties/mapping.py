@@ -45,7 +45,7 @@ class inject_properties_from(object):
             # WARNING: if strange names are defined for properties, python getattr might not work. maybe a dict-like behaviour
             # would be better?
             props = kwargs.setdefault(self._target, UserProperties())
-            map_properties_to_obj(self._co[config_cls.__name__], props, map_nonexistent=True)
+            props.update(self._co[config_cls.__name__])
             original_init(new_self, *args, **kwargs)
 
 

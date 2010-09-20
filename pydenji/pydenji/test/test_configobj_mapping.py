@@ -74,7 +74,7 @@ class  Test_configobj_mappingTestCase(unittest.TestCase):
                 self.props = props
 
         config = inject_properties_from(["[MockConfig]", "property1=123"])(MockConfig)()
-        self.assertEquals(123, config.props.property1)
+        self.assertEquals(123, config.props["property1"])
 
 
 

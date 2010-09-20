@@ -7,6 +7,6 @@
 
 # possible improvements include defining __contains__ and something to enumerate its properties.
 
-class UserProperties(object):
+class UserProperties(dict):
     pass
 
