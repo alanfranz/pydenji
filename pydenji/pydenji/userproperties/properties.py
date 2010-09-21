@@ -5,15 +5,18 @@
 
 # this is just an empty container right now.
 
-# possible improvements include defining __contains__ and something to enumerate its properties.
 from copy import deepcopy
-# TODO: improve this very basic class. let's think if we want to depend on python 2.6.
+from inspect import getframe
+
 class _FrozenDict(object):
     def __init__(self, d):
         self._d = deepcopy(d)
 
     def __getitem__(self, item):
         return self._d[item]
+    
+    def verify(self, raise_errors=False):
+        return self
 
 
 def UserProperties(property_mapping):

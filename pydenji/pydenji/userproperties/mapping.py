@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # (C) 2010 Alan Franzoni.
-
+from inspect import getabsfile
+from compiler import parseFile
 from configobj import ConfigObj
 from pydenji.userproperties.properties import UserProperties
+
 
 _NO_VALUE = object()
 
@@ -38,7 +40,6 @@ class inject_properties_from(object):
         self._target = target_kwarg
         
     def __call__(self, config_cls):
-        
         original_init = config_cls.__init__
         def new_init(new_self, *args, **kwargs):
             # do we need to do something like an override?
@@ -51,6 +52,9 @@ class inject_properties_from(object):
 
         config_cls.__init__ = new_init
         return config_cls
+
+    def _get_used_properties(self, cls):
+        ast = parseFile(getabsfile(cls))
 
 
 

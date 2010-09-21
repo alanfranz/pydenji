@@ -68,13 +68,28 @@ class  Test_configobj_mappingTestCase(unittest.TestCase):
         )(MockConfig)()
         self.assertEquals(123, config.property1)
 
-    def test_property_injection(self):
+    def test_properties_are_injected_as_keyword(self):
         class MockConfig(object):
             def __init__(self, props):
                 self.props = props
 
         config = inject_properties_from(["[MockConfig]", "property1=123"])(MockConfig)()
         self.assertEquals(123, config.props["property1"])
+
+    def test_properties_raises_error_on_unset_properties(self):
+        class MockConfig(object):
+            def __init__(self, props):
+                self.props = props.verify(raise_errors=True)
+                
+            def mymethod(self):
+                some = self.props["missingkey"]
+                
+        config = inject_properties_from(["[MockConfig]", "property1=123"])(MockConfig)
+        self.assertRaises(ValueError, config)
+
+
+
+
 
 
 
