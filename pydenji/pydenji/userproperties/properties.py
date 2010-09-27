@@ -6,7 +6,7 @@
 # this is just an empty container right now.
 
 from copy import deepcopy
-from inspect import getframe
+from inspect import currentframe
 
 class _FrozenDict(object):
     def __init__(self, d):
