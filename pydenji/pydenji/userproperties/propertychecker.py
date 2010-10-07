@@ -3,6 +3,7 @@
 # (C) 2010 Alan Franzoni.
 
 import compiler
+import os
 
 class GetattrVisitor(compiler.visitor.ASTVisitor):
     propattrname = "props"
@@ -42,8 +43,17 @@ class ClassVisitor(compiler.visitor.ASTVisitor):
             compiler.visitor.walk(node, PropVisitor(self.accumulator))
 
 
+def _get_actual_file_to_parse(filename):
+    # whenever using introspection it might happen that we get .pyc or .pyo files.
+    # but we can't parse those, we need the actual source. Check what happens with more recent
+    # python versions and the new pyc cache.
+    if filename.endswith(".pyc") or filename.endswith(".pyo"):
+        return filename[:-3] + "py"
+    return filename
+
+
 def walk_for_properties_usage(filename, object_name):
-    ast = compiler.parseFile(filename)
+    ast = compiler.parseFile(_get_actual_file_to_parse(filename))
     visitor = ClassVisitor(object_name)
     compiler.visitor.walk(ast, visitor)
     return visitor.accumulator
