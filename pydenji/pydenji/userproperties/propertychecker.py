@@ -29,8 +29,7 @@ class PropVisitor(compiler.visitor.ASTVisitor):
         n = compiler.visitor.walk(node, GetattrVisitor())
         if n.found_node:
             if (node.flags == compiler.consts.OP_APPLY):
-                # use a ConstWalker and so something if it's a const.
-                self.accumulator.add(node.subs[0].value)
+                    self.accumulator.add(node.subs[0].value)
 
 class ClassVisitor(compiler.visitor.ASTVisitor):
     def __init__(self, classname):
