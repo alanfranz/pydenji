@@ -66,8 +66,8 @@ def get_getitem_accesses(obj, attr):
     
     for name, func in funcs:
         stored_attributes = _get_accumulated(func, usage_matcher, 2)
-        for memorized_attr in stored_attributes:
-            attr_usage_matcher = [(LOAD_FAST, memorized_attr),
+        for stored_attr in stored_attributes:
+            attr_usage_matcher = [(LOAD_FAST, stored_attr),
                 _MatchingTuple((LOAD_CONST, _ANY_VALUE)), (BINARY_SUBSCR, None)]
             used_keys.update(_get_accumulated(func, attr_usage_matcher, 1))
 

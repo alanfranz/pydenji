@@ -3,11 +3,7 @@
 
 import unittest
 
-from pkg_resources import resource_filename
-
 from pydenji.userproperties.codescraper import get_getitem_accesses
-
-
 
 class ArbitraryObject(object):
     def somefunc(self):
