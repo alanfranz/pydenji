@@ -77,7 +77,7 @@ class  Test_configobj_mappingTestCase(unittest.TestCase):
         )(MockConfig)()
         self.assertEquals(123, config.property1)
 
-    def disabletest_properties_are_injected_as_keyword(self):
+    def test_properties_are_injected_as_keyword(self):
         class MockConfig1(object):
             def __init__(self, props):
                 self.props = props
@@ -85,7 +85,7 @@ class  Test_configobj_mappingTestCase(unittest.TestCase):
         config = inject_properties_from(["[MockConfig1]", "property1=123"])(MockConfig1)()
         self.assertEquals(123, config.props["property1"])
 
-    def disabletest_properties_raises_error_on_unset_properties(self):
+    def test_properties_raises_error_on_unset_properties(self):
         config = inject_properties_from(["[MockConfig2]", "property1=123"])(MockConfig2)
         #self.assertRaises(ValueError, config)
 
