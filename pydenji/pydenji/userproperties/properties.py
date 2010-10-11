@@ -14,6 +14,10 @@ class _FrozenDict(object):
 
     def __getitem__(self, item):
         return self._d[item]
+
+    def keys(self):
+        return self._d.keys()
+
     
     def verify(self, raise_errors=False):
         return self

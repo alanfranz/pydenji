@@ -4,6 +4,8 @@
 
 import compiler
 import os
+from inspect import getsourcefile
+from inspect import getsource
 
 class GetattrVisitor(compiler.visitor.ASTVisitor):
     propattrname = "props"
@@ -52,10 +54,23 @@ def _get_actual_file_to_parse(filename):
     return filename
 
 
-def walk_for_properties_usage(filename, object_name):
-    ast = compiler.parseFile(_get_actual_file_to_parse(filename))
+
+
+def walk_for_properties_usage(ast, object_name):
+    # very naive! won't work if some inheritance occurs.
     visitor = ClassVisitor(object_name)
     compiler.visitor.walk(ast, visitor)
     return visitor.accumulator
+
+def get_used_properties(obj):
+    cls = obj.__class__
+    return walk_source_for_properties_usage(getsource(cls), cls.__name__)
+
+def walk_file_for_properties_usage(filename, object_name):
+    return walk_for_properties_usage(compiler.parseFile(_get_actual_file_to_parse(filename)), object_name)
+
+def walk_source_for_properties_usage(src, object_name):
+    return walk_for_properties_usage(compiler.parse(src), object_name)
+
 
 

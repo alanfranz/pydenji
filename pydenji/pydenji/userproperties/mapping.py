@@ -5,6 +5,7 @@ from inspect import getabsfile
 from compiler import parseFile
 from configobj import ConfigObj
 from pydenji.userproperties.properties import UserProperties
+from pydenji.userproperties.propertychecker import get_used_properties
 
 
 _NO_VALUE = object()
@@ -48,13 +49,22 @@ class inject_properties_from(object):
             props = UserProperties(self._co[config_cls.__name__])
             kwargs[self._target] = props
             original_init(new_self, *args, **kwargs)
+            self._verify_no_missing_property(new_self, props)
 
 
         config_cls.__init__ = new_init
         return config_cls
 
-    def _get_used_properties(self, cls):
-        ast = parseFile(getabsfile(cls))
+    def _verify_no_missing_property(self, config_instance, props):
+        difference = set(get_used_properties(config_instance)).difference(set(props.keys()))
+        if difference:
+            raise ValueError, "Some property is missing: %s" % " ".join(difference)
+
+        
+
+
+
+
 
 
 

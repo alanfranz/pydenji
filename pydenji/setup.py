@@ -3,7 +3,8 @@ from setuptools import setup, find_packages
 setup(name='pydenji',
       version='0.3',
       description='Dependency Injection Toolkit',
-      install_requires=["importlib", "configobj"],
+      # add byteplay as soon as it works.
+      install_requires=["importlib", "configobj" ],
       long_description="""
       Dependency Injection Toolkit.
 
