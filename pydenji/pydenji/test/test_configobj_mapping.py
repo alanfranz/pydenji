@@ -87,7 +87,7 @@ class  Test_configobj_mappingTestCase(unittest.TestCase):
 
     def test_properties_raises_error_on_unset_properties(self):
         config = inject_properties_from(["[MockConfig2]", "property1=123"])(MockConfig2)
-        #self.assertRaises(ValueError, config)
+        self.assertRaises(ValueError, config)
 
 
 
