@@ -6,6 +6,7 @@ from compiler import parseFile
 from configobj import ConfigObj
 from pydenji.userproperties.properties import UserProperties
 from pydenji.userproperties.codescraper import get_getitem_accesses
+from pydenji._aop.intercept import intercept
 
 
 _NO_VALUE = object()
@@ -59,6 +60,27 @@ class inject_properties_from(object):
         difference = set(get_getitem_accesses(config_instance, attr)).difference(set(props.keys()))
         if difference:
             raise ValueError, "Some property is missing: %s" % " ".join(difference)
+
+
+class override_with(object):
+    def __init__(self, configobj_source):
+        self._co = ConfigObj(configobj_source, unrepr=True)
+
+    def __call__(self, config_cls):
+        for section_name in self._co.sections:
+            def section_interceptor(context):
+                o = context.proceed()
+                for k, v in self._co[section_name].items():
+                    setattr(o, k, v)
+                return o
+            config_cls = intercept(config_cls, section_name, section_interceptor)
+
+        return config_cls
+
+
+
+
+
 
         
 

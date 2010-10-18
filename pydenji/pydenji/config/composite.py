@@ -44,6 +44,6 @@ class CompositeConfig(object):
                     config.set_app_context(context)
 
 
-        
+
     
     
