@@ -13,12 +13,14 @@ class SomeNetworkedClass(object):
 
 
 class SomeConnector(object):
+    destination_filename_prefix = None
+    
     def __init__(self, address):
         self.address = address
 
     def connect(self):
         # just mark it did something. # FIXME: Windows support?
-        f = open("/tmp/pydenji_simple_configuration_test_%s" % self.address, "w").write("something")
+        f = open(self.destination_filename_prefix + self.address, "w").write("something")
 
 
 class SomeResource(object):
