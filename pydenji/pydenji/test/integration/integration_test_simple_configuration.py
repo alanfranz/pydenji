@@ -6,7 +6,7 @@
 
 import os
 from unittest import TestCase
-from .simple_app import *
+from pydenji.test.integration.simple_app import *
 
 from pydenji.appcontext.context import AppContext
 from pydenji.config.pythonconfig import Configuration, prototype, singleton
