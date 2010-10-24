@@ -11,7 +11,8 @@ from pkg_resources import resource_filename as rfn
 from pydenji.test.integration.simple_app import *
 
 from pydenji.appcontext.context import AppContext
-from pydenji.userproperties.mapping import inject_properties_from, override_with
+from pydenji.userproperties.mapping import inject_properties_from
+from pydenji.userproperties.overrider import override_with
 from pydenji.config.pythonconfig import Configuration, prototype, singleton
 
 

@@ -62,21 +62,6 @@ class inject_properties_from(object):
             raise ValueError, "Some property is missing: %s" % " ".join(difference)
 
 
-class override_with(object):
-    def __init__(self, configobj_source):
-        self._co = ConfigObj(configobj_source, unrepr=True)
-
-    def __call__(self, config_cls):
-        for section_name in self._co.sections:
-            def section_interceptor(context):
-                o = context.proceed()
-                for k, v in self._co[section_name].items():
-                    setattr(o, k, v)
-                return o
-            config_cls = intercept(config_cls, section_name, section_interceptor)
-
-        return config_cls
-
 
 
 

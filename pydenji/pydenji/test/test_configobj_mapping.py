@@ -5,7 +5,7 @@
 import unittest
 from pydenji.userproperties.mapping import map_properties_to_obj, ConfigObjPropertyMapper
 from pydenji.userproperties.mapping import inject_properties_from
-from pydenji.userproperties.mapping import override_with
+
 
 
 class MockConfig2(object):
@@ -87,21 +87,6 @@ class TestConfigObjMappingTestCase(unittest.TestCase):
     def test_properties_raises_error_on_unset_properties(self):
         config_cls = inject_properties_from(["[MockConfig2]", "property1=123"])(MockConfig2)
         self.assertRaises(ValueError, config_cls)
-
-
-class Obj(object):
-    pass
-
-class OverridenConfig(object):
-    def myobj(self):
-        myobj = Obj()
-        myobj.property1 = 123
-        return myobj
-
-class TestPropertyOverrider(unittest.TestCase):
-    def test_property_overriding(self):
-        config = override_with(["[myobj]", "property1=456"])(OverridenConfig)()
-        self.assertEquals(456, config.myobj().property1)
 
 
 
