@@ -2,11 +2,7 @@
 # -*- coding: utf-8 -*-
 # (C) 2010 Alan Franzoni.
 
-
-# this is just an empty container right now.
-
 from copy import deepcopy
-from inspect import currentframe
 
 # TODO: this is not a FrozenDict. Should we just kill it?
 class _FrozenDict(object):
