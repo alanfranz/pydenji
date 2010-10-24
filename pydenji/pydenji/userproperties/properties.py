@@ -8,6 +8,7 @@
 from copy import deepcopy
 from inspect import currentframe
 
+# TODO: this is not a FrozenDict. Should we just kill it?
 class _FrozenDict(object):
     def __init__(self, d):
         self._d = deepcopy(d)
@@ -17,10 +18,6 @@ class _FrozenDict(object):
 
     def keys(self):
         return self._d.keys()
-
-    
-    def verify(self, raise_errors=False):
-        return self
 
 
 def UserProperties(property_mapping):

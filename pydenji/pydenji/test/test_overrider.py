@@ -3,7 +3,7 @@
 # (C) 2010 Alan Franzoni.
 
 import unittest
-from configobj import ConfigObj
+
 from pydenji.userproperties.overrider import override_with
 
 class Obj(object):

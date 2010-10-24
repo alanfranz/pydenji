@@ -10,7 +10,7 @@ from pydenji.userproperties.mapping import inject_properties_from
 
 class MockConfig2(object):
     def __init__(self, props):
-        self.props = props.verify(raise_errors=True)
+        self.props = props
 
     def mymethod(self):
         some = self.props["missingkey"]

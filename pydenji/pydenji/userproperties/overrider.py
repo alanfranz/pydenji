@@ -9,12 +9,15 @@ class override_with(object):
         self._co = ConfigObj(configobj_source, unrepr=True)
 
     def __call__(self, config_cls):
+
         for section_name in self._co.sections:
             def section_interceptor(context):
                 o = context.proceed()
                 for k, v in self._co[section_name].items():
                     setattr(o, k, v)
                 return o
+            # this creates a new subclass every time! we should change the way
+            # intercept works??
             config_cls = intercept(config_cls, section_name, section_interceptor)
 
         return config_cls
