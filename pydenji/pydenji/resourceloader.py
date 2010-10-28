@@ -51,7 +51,7 @@ supported_schemes = {
 # should it break if resource does not exist?
 # maybe optionally? a differenct factory? readresourceloader, writeresourceloader,
 # mayberesourceloader?
-def resourceloader(resource_uri):
+def resource_filename_resolver(resource_uri):
     parsed = urlparse(resource_uri)
     if parsed.scheme not in supported_schemes:
         raise TypeError, "Scheme '%s' is unsupported" % parsed.scheme
