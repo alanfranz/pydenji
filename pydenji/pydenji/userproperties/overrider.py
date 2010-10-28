@@ -4,6 +4,7 @@
 from configobj import ConfigObj
 from pydenji._aop.intercept import intercept
 
+# TODO: change this name, I don't like it.
 class override_with(object):
     def __init__(self, configobj_source):
         self._co = ConfigObj(configobj_source, unrepr=True)
