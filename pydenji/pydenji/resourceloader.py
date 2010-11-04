@@ -78,19 +78,50 @@ class Resource(object):
     def stream(self):
         return open(self.filename, self._mode)
 
+def _get_full_path_pieces(path):
+    pieces = []
+    while True:
+        path, base = os.path.split(path)
+        pieces.append(path + base)
+        if (path == "/") and (base == ""):
+            break
+    pieces.reverse()
+    print pieces
+    return pieces
+
+def _verify_existence(full_path):
+    # quick bailout
+    if os.path.exists(full_path):
+        return
+
+    # check why it does not exist.
+    path_pieces = _get_full_path_pieces(full_path)
+
+    for piece in path_pieces[:-1]:
+        if not os.path.exists(piece):
+            raise ValueError, "Directory '%s' does not exist while looking for '%s'." % (
+                piece, full_path)
+        if not os.path.isdir(piece):
+            raise ValueError, "'%s' is not a directory while looking for '%s'" % (piece,
+                full_path)
+        if not os.access(piece, os.X_OK):
+            raise ValueError, "Traversal (x) permission denied on '%s', can't determine '%s' existence" % (
+                piece, full_path)
+
+                
+    if not os.path.exists(full_path):
+        raise ValueError, "'%s' does not exist." % full_path
+
+    # if we get here something is wrong.
+    raise AssertionError, "Something is wrong with verify_existence function."
+
 class ReadResource(Resource):
     def __init__(self, uri, binary=False):
         super(ReadResource, self).__init__(
             uri, "r" + ("b" if binary else "") )
 
     def _verify_consistency(self):
-        # TODO: rethink errors
-        # TODO: improve error reporting. If the directory has no x access, exists
-        # will just return False without better info on the problem.
-        if not os.path.exists(self.filename):
-            raise ValueError, "'%s' does not exist."
-
-
+        _verify_existence(self.filename)
         if not os.access(self.filename, os.R_OK):
             raise ValueError, ("Insufficient privileges, "
                 "can't read '%s' " % self.filename)
@@ -99,8 +130,10 @@ class WriteResource(Resource):
 
     def _verify_consistency(self):
         write_path_dir, basename = os.path.split(self.filename)
-        if not os.path.exists(write_path_dir):
-            raise ValueError, "Target write directory does not exist."
+        _verify_existence(write_path_dir)
+        if not os.path.isdir(write_path_dir):
+            raise ValueError, "'%s' is not a directory, can't write '%s'" % (
+                write_path_dir, basename)
         if not os.access(write_path_dir, os.W_OK):
             raise ValueError, ("Insufficient privileges, "
                 "can't write '%s' in '%s' " % (basename, write_path_dir))
