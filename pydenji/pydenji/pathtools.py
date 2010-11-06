@@ -29,7 +29,7 @@ def get_successive_path_pieces(path, force_absolute=False):
         path = os.path.abspath(path)
 
     if not path.startswith(os.sep):
-        raise IOError, "Path '%s' is not absolute" % path
+        raise IOError, "Path '%s' is not absolute and was not forced as such." % path
 
     parent = path
 
