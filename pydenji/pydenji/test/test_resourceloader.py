@@ -62,7 +62,7 @@ class TestResourceLoader(TestCase):
         # - I should be able to specify additional data for the stream(), e.g. b and +
         # the interface can be limited to stream() & filename
 
-        self.assertRaises(ValueError,
+        self.assertRaises(IOError,
             ReadResource, "file://" + "/dmfsdmfdksm/kmfdskmfksdmfksdmfdksm")
 
     def test_error_unaccessible_resource(self):

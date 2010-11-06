@@ -64,7 +64,7 @@ def verify_path_existence(full_path):
         return
 
     # check why it does not exist.
-    path_pieces = get_full_path_pieces(full_path)
+    path_pieces = get_successive_path_pieces(full_path)
 
     for piece in path_pieces[:-1]:
         if not os.path.exists(piece):
