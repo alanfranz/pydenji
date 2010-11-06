@@ -35,7 +35,6 @@ def get_successive_path_pieces(path, force_absolute=False):
 
     while True:
         parent, base = os.path.split(parent)
-        print "'%s' '%s'" % (parent, base)
         if (parent == os.sep):
             piece = parent + base
             _appender(pieces, piece)
