@@ -133,24 +133,3 @@ class TestWriteResource(TestCase):
         f.close()
 
         self.assertRaises(ValueError, NewFileWriteResource, "file://" + self.tempdir + os.sep + "newfile")
-
-
-#
-    def disabletest_maybe_resource(self):
-        # sometimes we're uncertain whether a certain read resource exists
-        # and we don't want to throw an exception if it doesn't.
-        # the interface is slightly different and it's clear that it's a factory
-
-        # should we call this firstExistingResource?
-        maybe, resource = maybeReadResource("gianni", "pinotto", "giannina",
-                                        additional_mode="...")
-        # return the first existing resource between those that were passed.
-        # if at least one exists, maybe is true and resource is a ReadResource;
-        # if all resources get checked and none exists, maybe is False and resource
-        # is None
-
-
-
-
-
-

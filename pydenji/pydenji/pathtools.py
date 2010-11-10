@@ -83,6 +83,4 @@ def verify_path_existence(full_path):
     # if we get here something is wrong.
     raise AssertionError, "Something is wrong with this function."
 
-if __name__ == "__main__":
-    print get_full_path_pieces("sbirulabba/ciccio")
 
