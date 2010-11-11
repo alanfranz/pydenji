@@ -6,6 +6,8 @@ from functools import partial
 from types import UnboundMethodType
 
 from pydenji.appcontext.aware import is_appcontext_aware
+from pydenji._aop.intercept import intercept
+from pydenji.placeholders import Placeholder
 
 # TODO: we might probably reduce the number of constants.
 _CONFIGURED_OBJECT_FACTORY = "_pydenji__CONFIGURED_OBJECT_FACTORY"
@@ -72,19 +74,48 @@ def _to_be_configured(clsattr, attrvalue):
         not is_object_factory(attrvalue) and
         should_be_configured(attrvalue))
 
-def Configuration(cls, configure_with=singleton, suffix="Configuration"):
-    """
-    Makes all public, unwrapped methods *eager singletons* by default.
-    Also, after instantiation a "params" instance attribute will be set -
-    it will hold a dictionary.
-
-    Non-public methods and already-wrapped methods will just go untouched.
-    """
+# TODO: this function means nothing, rename it.
+def _configure_with(cls, configure_with):
     configured_dict = {}
     for clsattr in dir(cls):
         attrvalue = getattr(cls, clsattr)
         if _to_be_configured(clsattr, attrvalue):
             configured_dict[clsattr] = configure_with(attrvalue)
+    return configured_dict
+
+#_NO_VALUE = object()
+#
+#def _get_propsetter_intercepted(cls):
+#    def propsetter_init_interceptor(context):
+#        context.proceed()
+#        instance = context.instance
+#
+#        #TODO: think twice. Is this a good way to do it? maybe ast parsing would be FAR better.
+#        # something explict to require properties...
+#
+#        required_properties = getattr(instance, "required_properties")
+#        for propname in required_properties:
+#            if getattr(instance, propname,  _NO_VALUE) is _NO_VALUE:
+#                setattr(instance, propname, Placeholder(propname))
+#
+#    return intercept(cls, "__init__", propsetter_init_interceptor)
+
+def Configuration(cls, configure_with=singleton, suffix=""):
+    """
+    Makes all public, unwrapped methods *eager singletons* by default.
+    Also, after instantiation a "params" instance attribute will be set -
+    it will hold a dictionary.
+
+    Also sets required_properties init interceptor; if the class or the
+    instance has got a "required_properties" attribute, after initialization
+    that "resolve" required properties by settings placeholders instead.
+
+    (this won't completely solve missing placeholder configuration, by the way).
+    
+
+    Non-public methods and already-wrapped methods will just go untouched.
+    """
+    configured_dict = _configure_with(cls, configure_with)
     cls_type = type(cls)
     return cls_type(cls.__name__ + suffix, (cls, ), configured_dict)
 

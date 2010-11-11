@@ -1,8 +1,10 @@
 from setuptools import setup, find_packages
 
 setup(name='pydenji',
-      version='0.1',
+      version='0.3',
       description='Dependency Injection Toolkit',
+      # add byteplay as soon as it works.
+      install_requires=["importlib", "configobj", "byteplay==0.2" ],
       long_description="""
       Dependency Injection Toolkit.
 
@@ -20,5 +22,5 @@ setup(name='pydenji',
       keywords='dependency injection inversion control ioc container',
       author_email='username@franzoni.eu',
       url='http://pydenji.franzoni.eu',
-      packages=find_packages(exclude=["test", "pydenji_integration_test"])
+      packages=find_packages(exclude=["test"])
      )
