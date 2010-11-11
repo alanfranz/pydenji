@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(name='pydenji',
-      version='0.3',
+      version='0.4',
       description='Dependency Injection Toolkit',
       # add byteplay as soon as it works.
       install_requires=["importlib", "configobj", "byteplay==0.2" ],
