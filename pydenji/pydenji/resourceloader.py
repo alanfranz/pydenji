@@ -75,8 +75,8 @@ class Resource(object):
         # if something is wrong.
         pass
 
-    def stream(self):
-        return open(self.filename, self._mode)
+    def stream(self, buffering=-1):
+        return open(self.filename, self._mode, buffering)
 
 
 
