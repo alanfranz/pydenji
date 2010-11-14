@@ -46,6 +46,7 @@ def package_uri_resolver(parsed_uri):
 # todo: support hooks for different schemes?
 supported_schemes = {
     "file" : file_uri_resolver,
+    "" : file_uri_resolver,
     "pkg": package_uri_resolver,
 }
 

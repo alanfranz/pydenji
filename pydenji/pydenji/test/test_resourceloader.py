@@ -15,7 +15,6 @@ from pydenji.resourceloader import AppendingWriteResource
 from pydenji.resourceloader import NewFileWriteResource
 
 
-
 class TestFileResolver(TestCase):
     def test_resource_resolver_retrieves_filesystem_filename(self):
         resolved = resource_filename_resolver("file:/tmp/testfile")
@@ -24,6 +23,9 @@ class TestFileResolver(TestCase):
     def test_resolver_refuses_relative_file_resource(self):
         self.assertRaises(ValueError, resource_filename_resolver, "file:tmp/testfile")
 
+    def test_uris_without_scheme_are_treated_as_file_uris(self):
+        resolved = resource_filename_resolver("/tmp/testfile")
+        self.assertEquals("/tmp/testfile", resolved)
 
 class TestPackageResolver(TestCase):
     def test_resolver_retrieves_package_resource_filename(self):
