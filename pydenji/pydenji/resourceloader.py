@@ -55,8 +55,6 @@ supported_schemes = {
 # mayberesourceloader?
 # check: filepath is always absolute?
 def resource_filename_resolver(resource_uri):
-    # TODO: add a default resolver for un-uried resources?
-    
     parsed = urlparse(resource_uri)
     if parsed.scheme not in supported_schemes:
         raise TypeError, "Scheme '%s' is unsupported" % parsed.scheme
