@@ -40,7 +40,7 @@ class ReadResource(Resource):
             uri, "r" + ("b" if binary else "") )
 
     def _verify_consistency(self):
-        verify_path_existence(self.filename)
+        verify_path_existence(self.filename, ResourceAccessError)
         if not os.access(self.filename, os.R_OK):
             raise ResourceAccessError, ("Insufficient privileges, "
                 "can't read '%s' " % self.filename)
@@ -49,7 +49,7 @@ class WriteResource(Resource):
 
     def _verify_consistency(self):
         write_path_dir, basename = os.path.split(self.filename)
-        verify_path_existence(write_path_dir)
+        verify_path_existence(write_path_dir, ResourceAccessError)
         if not os.path.isdir(write_path_dir):
             raise ResourceAccessError, "'%s' is not a directory, can't write '%s'" % (
                 write_path_dir, basename)
