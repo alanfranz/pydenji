@@ -6,6 +6,7 @@
 # how to work with pkg_resources Requirement classes
 # how to work with pkg_resources split packages, e.g. those using namespace_packages
 # how will this play along distutils2 and its pkgutil.open()
+# support unicode/encodings/etc.
 
 import os
 
