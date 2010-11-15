@@ -2,20 +2,15 @@
 # -*- coding: utf-8 -*-
 # (C) 2010 Alan Franzoni.
 
-# TBD: something to get consistent access to resources, just like
-# springs own classpath/file/url etc. parser.
 # check:
 # how to work with pkg_resources Requirement classes
 # how to work with pkg_resources split packages, e.g. those using namespace_packages
 # how will this play along distutils2 and its pkgutil.open()
 
 import os
-from urlparse import urlparse
-
 
 from pydenji.pathtools import verify_path_existence
 from pydenji.uriresolver import resource_filename_resolver
-
 
 class Resource(object):
     # TODO: check whether twisted filepath is better.
