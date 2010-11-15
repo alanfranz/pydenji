@@ -16,8 +16,7 @@ from pydenji.uriresolver import resource_filename_resolver
 class ResourceAccessError(IOError):
     pass
 
-class Resource(object):
-    # TODO: check whether twisted filepath is better.
+class RWResource(object):
     _resolver = staticmethod(resource_filename_resolver)
 
     def __init__(self, uri, mode):
@@ -30,11 +29,12 @@ class Resource(object):
         # if something is wrong.
         pass
 
+
     def open(self, buffering=-1):
         return open(self.filename, self._mode, buffering)
 
 
-class ReadResource(Resource):
+class ReadResource(RWResource):
     def __init__(self, uri, binary=False):
         super(ReadResource, self).__init__(
             uri, "r" + ("b" if binary else "") )
@@ -45,8 +45,7 @@ class ReadResource(Resource):
             raise ResourceAccessError, ("Insufficient privileges, "
                 "can't read '%s' " % self.filename)
 
-class WriteResource(Resource):
-
+class WriteResource(RWResource):
     def _verify_consistency(self):
         write_path_dir, basename = os.path.split(self.filename)
         verify_path_existence(write_path_dir, ResourceAccessError)
@@ -67,7 +66,6 @@ def AppendingWriteResource(uri, binary=False):
     # TODO: do we need an appender which just appends, e.g. never creates?
     return WriteResource(uri, "a" + ("b" if binary else ""))
 
-
 class NewFileWriteResource(WriteResource):
     def __init__(self, uri, binary=False):
         super(NewFileWriteResource, self).__init__(uri, "w" + ("b" if binary else ""))
@@ -77,17 +75,15 @@ class NewFileWriteResource(WriteResource):
             raise ResourceAccessError, "'%s' already exists." % self.filename
         super(NewFileWriteResource, self)._verify_consistency()
 
+class ExecutableResource(object):
+    _resolver = staticmethod(resource_filename_resolver)
 
- 
+    def __init__(self, uri):
+        self.filename = self._resolver(uri)
+        self._verify_consistency()
 
-
-
-
-
-
-
-
-
-    
-
-
+    def _verify_consistency(self):
+        verify_path_existence(self.filename, ResourceAccessError)
+        if not os.access(self.filename, os.X_OK):
+            raise ResourceAccessError, ("Insufficient privileges, "
+                "can't execute '%s' " % self.filename)

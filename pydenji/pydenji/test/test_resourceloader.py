@@ -13,6 +13,7 @@ from pydenji.resourceloader import OverwritingWriteResource
 from pydenji.resourceloader import AppendingWriteResource
 from pydenji.resourceloader import NewFileWriteResource
 from pydenji.resourceloader import ResourceAccessError
+from pydenji.resourceloader import ExecutableResource
 
 class TestResourceLoader(TestCase):
     # think: existing == accessible, or not?
@@ -113,3 +114,23 @@ class TestWriteResource(TestCase):
         f.close()
 
         self.assertRaises(ResourceAccessError, NewFileWriteResource, "file://" + self.tempdir + os.sep + "newfile")
+
+
+class TestExecutableResource(TestCase):
+    def setUp(self):
+        temp = NamedTemporaryFile()
+        temp.write("hello")
+        temp.flush()
+        
+        self.temp = temp
+
+    def tearDown(self):
+        self.temp.close()
+
+    def test_executable_resource_can_be_loaded(self):
+        os.chmod(self.temp.name, 100)
+        res = ExecutableResource(self.temp.name)
+
+    def test_not_executable_resource_raies_error(self):
+        os.chmod(self.temp.name, 000)
+        self.assertRaises(ResourceAccessError, ExecutableResource, self.temp.name)
