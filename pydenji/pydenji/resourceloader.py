@@ -12,7 +12,7 @@
 import os
 from urlparse import urlparse
 
-from pkg_resources import resource_filename
+
 from pydenji.pathtools import verify_path_existence
 from pydenji.uriresolver import resource_filename_resolver
 
