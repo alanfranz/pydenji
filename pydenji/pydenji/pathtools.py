@@ -53,7 +53,7 @@ def get_successive_path_pieces(path, force_absolute=False):
 class NotExistingPath(IOError):
     pass
 
-def verify_path_existence(full_path):
+def verify_path_existence(full_path, on_error_raise=NotExistingPath):
     """
     Verifies that full_path exists. If it doesn't, it throws a proper and clear error that
     helps understanding what's the issue with such path.
@@ -68,17 +68,17 @@ def verify_path_existence(full_path):
 
     for piece in path_pieces[:-1]:
         if not os.path.exists(piece):
-            raise NotExistingPath, "Directory '%s' does not exist while looking for '%s'." % (
+            raise on_error_raise, "Directory '%s' does not exist while looking for '%s'." % (
                 piece, full_path)
         if not os.path.isdir(piece):
-            raise NotExistingPath, "'%s' is not a directory while looking for '%s'" % (piece,
+            raise on_error_raise, "'%s' is not a directory while looking for '%s'" % (piece,
                 full_path)
         if not os.access(piece, os.X_OK):
-            raise NotExistingPath, "Traversal (x) permission denied on '%s', can't determine '%s' existence" % (
+            raise on_error_raise, "Traversal (x) permission denied on '%s', can't determine '%s' existence" % (
                 piece, full_path)
 
     if not os.path.exists(full_path):
-        raise NotExistingPath, "'%s' does not exist." % full_path
+        raise on_error_raise, "'%s' does not exist." % full_path
 
     # if we get here something is wrong.
     raise AssertionError, "Something is wrong with this function."
