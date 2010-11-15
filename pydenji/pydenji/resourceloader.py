@@ -16,23 +16,6 @@ from pkg_resources import resource_filename
 from pydenji.pathtools import verify_path_existence
 
 
-# this currently more a resourcelocator than a resourceloader. 
-
-# do we need this?
-class Resource(object):
-
-    # will the stream be open for reading or for writing?
-    # by default I think we'll just support reading streams.
-    # binary or not?
-    # too complex?
-    # check what Spring does.
-    def get_stream(self, mode):
-        raise NotImplementedError, "Not yet implemented."
-
-    @property
-    def filename(self):
-        raise NotImplementedError, "Not yet implemented."
-
 def file_uri_resolver(parsed_uri):
     if not parsed_uri.path.startswith("/"):
         raise ValueError, "Relative paths are not supported."
