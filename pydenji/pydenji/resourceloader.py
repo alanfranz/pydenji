@@ -14,35 +14,8 @@ from urlparse import urlparse
 
 from pkg_resources import resource_filename
 from pydenji.pathtools import verify_path_existence
+from pydenji.uriresolver import resource_filename_resolver
 
-
-def file_uri_resolver(parsed_uri):
-    if not parsed_uri.path.startswith("/"):
-        raise ValueError, "Relative paths are not supported."
-    if parsed_uri.netloc:
-        raise ValueError, "Netloc in file scheme is unsupported."
-    return parsed_uri.path
-
-def package_uri_resolver(parsed_uri):
-    return resource_filename(parsed_uri.netloc, parsed_uri.path)
-
-# todo: support hooks for different schemes?
-supported_schemes = {
-    "file" : file_uri_resolver,
-    "" : file_uri_resolver,
-    "pkg": package_uri_resolver,
-}
-
-# should it break if resource does not exist?
-# maybe optionally? a differenct factory? readresourceloader, writeresourceloader,
-# mayberesourceloader?
-# check: filepath is always absolute?
-def resource_filename_resolver(resource_uri):
-    parsed = urlparse(resource_uri)
-    if parsed.scheme not in supported_schemes:
-        raise TypeError, "Scheme '%s' is unsupported" % parsed.scheme
-
-    return supported_schemes[parsed.scheme](parsed)
 
 class Resource(object):
     # TODO: check whether twisted filepath is better.
@@ -58,9 +31,8 @@ class Resource(object):
         # if something is wrong.
         pass
 
-    def stream(self, buffering=-1):
+    def open(self, buffering=-1):
         return open(self.filename, self._mode, buffering)
-
 
 
 class ReadResource(Resource):

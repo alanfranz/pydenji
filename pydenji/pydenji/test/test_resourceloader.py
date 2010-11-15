@@ -8,33 +8,10 @@ from tempfile import NamedTemporaryFile
 from tempfile import mkdtemp
 from shutil import rmtree
 
-from pydenji.resourceloader import resource_filename_resolver
 from pydenji.resourceloader import ReadResource
 from pydenji.resourceloader import OverwritingWriteResource
 from pydenji.resourceloader import AppendingWriteResource
 from pydenji.resourceloader import NewFileWriteResource
-
-
-class TestFileResolver(TestCase):
-    def test_resource_resolver_retrieves_filesystem_filename(self):
-        resolved = resource_filename_resolver("file:/tmp/testfile")
-        self.assertEquals("/tmp/testfile", resolved)
-
-    def test_resolver_refuses_relative_file_resource(self):
-        self.assertRaises(ValueError, resource_filename_resolver, "file:tmp/testfile")
-
-    def test_uris_without_scheme_are_treated_as_file_uris(self):
-        resolved = resource_filename_resolver("/tmp/testfile")
-        self.assertEquals("/tmp/testfile", resolved)
-
-class TestPackageResolver(TestCase):
-    def test_resolver_retrieves_package_resource_filename(self):
-        resolved = resource_filename_resolver("pkg://pydenji/test/test_resourceloader.py")
-        # I don't want to use pkg_resources here because it seems not a proper
-        # test just repeating what the actual implementation will be.
-        # must strip Cs and Os just in case we're running from pyc or pyo.
-        self.assertEquals(os.path.abspath(__file__.rstrip("co")), resolved)
-
 
 class TestResourceLoader(TestCase):
     # think: existing == accessible, or not?
@@ -54,7 +31,7 @@ class TestResourceLoader(TestCase):
         # - I should be able to specify additional data for the stream(), e.g. b and +
         # the interface can be limited to stream() & filename
 
-        content = ReadResource("file://" + self.temp.name).stream().read()
+        content = ReadResource("file://" + self.temp.name).open().read()
         self.assertEquals("hello", content)
 
     def test_error_not_existing_resource(self):
@@ -97,7 +74,7 @@ class TestWriteResource(TestCase):
 
     def test_overwriting_allows_writing_to_resource(self):
         resource = OverwritingWriteResource("file://" + self.tempdir + os.sep + "newfile")
-        stream = resource.stream()
+        stream = resource.open()
         stream.write("abc")
         stream.close()
 
@@ -110,7 +87,7 @@ class TestWriteResource(TestCase):
         f.close()
 
         resource = AppendingWriteResource("file://" + self.tempdir + os.sep + "newfile")
-        stream = resource.stream()
+        stream = resource.open()
         stream.write("fgh")
         stream.close()
         
@@ -119,7 +96,7 @@ class TestWriteResource(TestCase):
 
     def test_appending_writing_resource_creates_if_file_does_not_exist(self):
         resource = AppendingWriteResource("file://" + self.tempdir + os.sep + "newfile")
-        stream = resource.stream()
+        stream = resource.open()
         stream.write("fgh")
         stream.close()
 
