@@ -12,6 +12,7 @@ from pydenji.resourceloader import ReadResource
 from pydenji.resourceloader import OverwritingWriteResource
 from pydenji.resourceloader import AppendingWriteResource
 from pydenji.resourceloader import NewFileWriteResource
+from pydenji.resourceloader import ResourceAccessError
 
 class TestResourceLoader(TestCase):
     # think: existing == accessible, or not?
@@ -46,7 +47,7 @@ class TestResourceLoader(TestCase):
 
     def test_error_unaccessible_resource(self):
         os.chmod(self.temp.name, 0)
-        self.assertRaises(ValueError,
+        self.assertRaises(ResourceAccessError,
             ReadResource, "file://" + self.temp.name)
 
 
@@ -61,7 +62,7 @@ class TestWriteResource(TestCase):
         f = open(self.tempdir + os.sep + "newfile", "w")
         f.close()
         os.chmod(self.tempdir + os.sep + "newfile", 0)
-        self.assertRaises(ValueError, OverwritingWriteResource, "file://" + self.tempdir + os.sep + "newfile")
+        self.assertRaises(ResourceAccessError, OverwritingWriteResource, "file://" + self.tempdir + os.sep + "newfile")
         
     def test_overwriting_resource_allows_writing_if_file_does_not_exist(self):
         resource = OverwritingWriteResource("file://" + self.tempdir + os.sep + "newfile")
@@ -111,4 +112,4 @@ class TestWriteResource(TestCase):
         f.write("asd")
         f.close()
 
-        self.assertRaises(ValueError, NewFileWriteResource, "file://" + self.tempdir + os.sep + "newfile")
+        self.assertRaises(ResourceAccessError, NewFileWriteResource, "file://" + self.tempdir + os.sep + "newfile")
