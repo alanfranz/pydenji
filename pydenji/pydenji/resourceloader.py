@@ -1,3 +1,4 @@
+import os.path
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # (C) 2010 Alan Franzoni.
@@ -87,3 +88,12 @@ class ExecutableResource(object):
         if not os.access(self.filename, os.X_OK):
             raise ResourceAccessError, ("Insufficient privileges, "
                 "can't execute '%s' " % self.filename)
+
+def enumerateResources(resource, childrenResourceFactory=ReadResource):
+    # this is a bit naive, but we probably won't need anything more.
+    if os.path.isdir(resource.filename):
+        return [childrenResourceFactory(resource.filename + os.sep + path) for
+            path in os.listdir(resource.filename)]
+    else:
+        return [childrenResourceFactory(resource.filename)]
+            

@@ -14,6 +14,7 @@ from pydenji.resourceloader import AppendingWriteResource
 from pydenji.resourceloader import NewFileWriteResource
 from pydenji.resourceloader import ResourceAccessError
 from pydenji.resourceloader import ExecutableResource
+from pydenji.resourceloader import enumerateResources
 
 class TestResourceLoader(TestCase):
     # think: existing == accessible, or not?
@@ -115,7 +116,6 @@ class TestWriteResource(TestCase):
 
         self.assertRaises(ResourceAccessError, NewFileWriteResource, "file://" + self.tempdir + os.sep + "newfile")
 
-
 class TestExecutableResource(TestCase):
     def setUp(self):
         temp = NamedTemporaryFile()
@@ -134,3 +134,28 @@ class TestExecutableResource(TestCase):
     def test_not_executable_resource_raies_error(self):
         os.chmod(self.temp.name, 000)
         self.assertRaises(ResourceAccessError, ExecutableResource, self.temp.name)
+
+class TestResourceEnumerator(TestCase):
+    def setUp(self):
+        self.tempdir = mkdtemp()
+        f = open(self.tempdir + os.sep + "a", "w")
+        f = open(self.tempdir + os.sep + "b", "w")
+        f = open(self.tempdir + os.sep + "c", "w")
+
+    def tearDown(self):
+        rmtree(self.tempdir)
+
+
+    def test_enumerator_returns_resources_from_a_dir(self):
+        rs = enumerateResources(ReadResource(self.tempdir))
+        self.assertEquals(3, len(rs))
+
+    def test_enumerator_returns_required_type_of_resources(self):
+        rs = enumerateResources(ReadResource(self.tempdir), ReadResource)
+        for elem in rs:
+            self.assert_(isinstance(elem, ReadResource))
+
+    def test_enumerator_returns_same_filename_resource_if_file_passed(self):
+        rs = enumerateResources(ReadResource(self.tempdir + os.sep + "a"))
+        self.assertEquals(self.tempdir + os.sep + "a", rs[0].filename)
+
