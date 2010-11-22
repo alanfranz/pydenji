@@ -5,7 +5,6 @@
 from unittest import TestCase
 from pydenji.pathtools import get_successive_path_pieces
 
-
 class TestPathTools(TestCase):
     def test_absolute_file_pieces_are_returned(self):
         self.assertEquals(["/", "/path/", "/path/myfile"],

@@ -6,7 +6,6 @@
 
 import os
 from unittest import TestCase
-from pkg_resources import resource_filename as rfn
 
 from pydenji.test.integration.simple_app import *
 
@@ -14,13 +13,19 @@ from pydenji.appcontext.context import AppContext
 from pydenji.userproperties.mapping import inject_properties_from
 from pydenji.userproperties.overrider import override_with
 from pydenji.config.pythonconfig import Configuration, prototype, singleton
+from pydenji.uriresolver import resource_filename_resolver as rfr
+from pydenji.placeholders import Placeholder
 
 
-@override_with(rfn("pydenji", "test/integration/resources/propertyconf.properties"))
+@inject_properties_from(rfr("pkg://pydenji/test/integration/resources/inject.conf"))
+#@override_with(rfr("pkg://pydenji/test/integration/resources/propertyconf.properties"))
 @Configuration
 class MyRemoteFetchService(object):
-    target_address = "somenetworkaddress"
+    target_address = Placeholder("target_address")
 
+    def __init__(self, props):
+        self.target_address = props["target_address"]
+    
     def network_service(self):
         return SomeService(self.networked_factory)
 
@@ -35,7 +40,7 @@ class MyRemoteFetchService(object):
 
     @singleton.lazy
     def resource(self):
-        return SomeResource
+        return SomeResource()
 
 class TestSimpleConfiguration(TestCase):
     def setUp(self):
@@ -46,8 +51,11 @@ class TestSimpleConfiguration(TestCase):
 
     def test_basic(self):
         context = AppContext(MyRemoteFetchService())
+        print context._names_factories
         network_service = context.get_object("network_service")
         network_service.performAction()
+        # connector = context.get_object("connector")
+        #print connector.destination_filename_prefix
         self.assertTrue(os.path.exists("/tmp/pydenji_simple_configuration_test_somenetworkaddress"), "missing file it should be created")
         os.unlink("/tmp/pydenji_simple_configuration_test_somenetworkaddress")
 

@@ -11,6 +11,8 @@ class override_with(object):
 
     def __call__(self, config_cls):
 
+        # this mingles with configuration decorators!!
+        # TODO: fix this!
         for section_name in self._co.sections:
             def section_interceptor(context):
                 o = context.proceed()

@@ -2,13 +2,15 @@
 # -*- coding: utf-8 -*-
 # (C) 2010 Alan Franzoni.
 
+# TODO: add unit tests for this.
+
 class UnconfiguredError(Exception):
     def __init__(self, name):
         Exception.__init__(self, "'%s' placeholder has not been configured!" % name)
 
 class Placeholder(object):
     def __init__(self, name):
-        self.name = name
+        object.__setattr__(self, "name", name)
 
     def __getattr__(self, attr):
         raise UnconfiguredError, self.name
