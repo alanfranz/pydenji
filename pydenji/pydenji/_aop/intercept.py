@@ -15,29 +15,39 @@ This system uses dynamic subclassing. Original classes are untouched.
 # TODO: let interception not to depend on our context object, but use standard function args?
 
 class _Context(object):
-    def __init__(self, instance, method, args, kwargs):
-        self.instance = instance
+    def __init__(self, method, args, kwargs):
         self.method = method
         self.args = args
         self.kwargs = kwargs
 
     def proceed(self):
-        return self.method(self.instance, *self.args, **self.kwargs)
+        return self.method(*self.args, **self.kwargs)
 
+    
 def _interceptor_picker(original_method, method_interceptor):
     # picks the proper interceptor depending on original_method type.
     if getattr(original_method, "im_func", None):
         if getattr(original_method, "im_self"):
-            raise NotImplementedError, "Not yet implemented."
+            return _classmethod_interceptor(original_method, method_interceptor)
         else:
             return _instancemethod_interceptor(original_method, method_interceptor)
     else:
-        raise NotImplementedError, "Not yet implemented."
+        return _staticmethod_interceptor(original_method, method_interceptor)
 
+def _staticmethod_interceptor(original_staticmethod, method_interceptor):
+    def intercepted(*args, **kwargs):
+        return method_interceptor(_Context(original_staticmethod, args, kwargs))
+    return staticmethod(intercepted)
+
+def _classmethod_interceptor(original_classmethod, method_interceptor):
+    def intercepted(cls, *args, **kwargs):
+        # we must not pass cls in args since classmethod will bind it.
+        return method_interceptor(_Context(original_classmethod, args, kwargs))
+    return classmethod(intercepted)
 
 def _instancemethod_interceptor(original_method, method_interceptor):
     def intercepted(instance, *args, **kwargs):
-        return method_interceptor(_Context(instance, original_method, args, kwargs))
+        return method_interceptor(_Context(original_method, (instance, ) + args, kwargs))
     return intercepted
 
 def intercept(cls, method_name, method_interceptor):
