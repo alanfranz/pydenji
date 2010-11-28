@@ -28,7 +28,7 @@ class TestInterception(unittest.TestCase):
         self.assertEquals(5, test_obj.other_arg)
 
 
-    def test_method_interception(self):
+    def test_instancemethod_interception(self):
         def method_interceptor(context):
             value = context.proceed()
             return value * 4
