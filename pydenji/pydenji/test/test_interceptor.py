@@ -15,14 +15,19 @@ class TestInterception(unittest.TestCase):
 
         def method(self, value):
             return self.arg + value
+        method.someattribute = 123 # used for attribute preservation test.
 
-        @classmethod
+
         def class_method(cls, value):
             return cls.clsattr + value
+        class_method.someattribute = 456
+        class_method = classmethod(class_method)
 
-        @staticmethod
         def static_method(value):
             return 7 + value
+        static_method.someattribute = 789
+        static_method = staticmethod(static_method)
+        
 
     # TODO: split those tests into multiple tests!
     def test_init_interception(self):
@@ -74,5 +79,27 @@ class TestInterception(unittest.TestCase):
         self.assertEquals(( 5 + 7) *2, test_obj.static_method(5))
         test_obj = intercepted(0)
         self.assertEquals((5 + 7) * 2, test_obj.static_method(5))
+
+
+    def test_instancemethod_interception_preserves_original_func_dict(self):
+        def method_interceptor(context):
+            return context.proceed()
+
+        intercepted = intercept(self.MyTestClass, "method", method_interceptor)
+        self.assertEquals(123, intercepted.method.someattribute)
+
+    def test_classmethod_interception_preserves_original_func_dict(self):
+        def method_interceptor(context):
+            return context.proceed()
+
+        intercepted = intercept(self.MyTestClass, "class_method", method_interceptor)
+        self.assertEquals(456, intercepted.class_method.someattribute)
+
+    def test_staticmethod_interception_preserves_original_func_dict(self):
+        def method_interceptor(context):
+            return context.proceed()
+
+        intercepted = intercept(self.MyTestClass, "static_method", method_interceptor)
+        self.assertEquals(789, intercepted.static_method.someattribute)
 
 

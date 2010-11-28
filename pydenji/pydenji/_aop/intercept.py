@@ -23,6 +23,10 @@ class _Context(object):
     def proceed(self):
         return self.method(*self.args, **self.kwargs)
 
+
+def _update_func_dict(source, dest):
+    dest.__dict__.update(source.__dict__)
+    return dest
     
 def _interceptor_picker(original_method, method_interceptor):
     # picks the proper interceptor depending on original_method type.
@@ -37,24 +41,25 @@ def _interceptor_picker(original_method, method_interceptor):
 def _staticmethod_interceptor(original_staticmethod, method_interceptor):
     def intercepted(*args, **kwargs):
         return method_interceptor(_Context(original_staticmethod, args, kwargs))
-    return staticmethod(intercepted)
+    return staticmethod(_update_func_dict(original_staticmethod, intercepted))
 
 def _classmethod_interceptor(original_classmethod, method_interceptor):
     def intercepted(cls, *args, **kwargs):
         # we must not pass cls in args since classmethod will bind it.
         return method_interceptor(_Context(original_classmethod, args, kwargs))
-    return classmethod(intercepted)
+    return classmethod(_update_func_dict(original_classmethod, intercepted))
 
 def _instancemethod_interceptor(original_method, method_interceptor):
     def intercepted(instance, *args, **kwargs):
         return method_interceptor(_Context(original_method, (instance, ) + args, kwargs))
-    return intercepted
+    return _update_func_dict(original_method, intercepted)
 
 def intercept(cls, method_name, method_interceptor):
     # interceptor result will be returned. no auto-return of original method
     # return value will be performed.
     original_method = getattr(cls, method_name)
     intercepted = _interceptor_picker(original_method, method_interceptor)
+    
     return type(cls)(cls.__name__, (cls, ), {method_name:intercepted} )
     
 
