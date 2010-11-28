@@ -18,7 +18,7 @@ from pydenji.placeholders import Placeholder
 
 
 @inject_properties_from(rfr("pkg://pydenji/test/integration/resources/inject.conf"))
-#@override_with(rfr("pkg://pydenji/test/integration/resources/propertyconf.properties"))
+@override_with(rfr("pkg://pydenji/test/integration/resources/propertyconf.properties"))
 @Configuration
 class MyRemoteFetchService(object):
     target_address = Placeholder("target_address")
