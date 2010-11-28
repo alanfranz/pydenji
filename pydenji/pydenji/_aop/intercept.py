@@ -24,7 +24,7 @@ class _Context(object):
     def proceed(self):
         return self.method(self.instance, *self.args, **self.kwargs)
 
-def _interceptor(original_method, method_interceptor):
+def _instancemethod_interceptor(original_method, method_interceptor):
     def intercepted(instance, *args, **kwargs):
         return method_interceptor(_Context(instance, original_method, args, kwargs))
     return intercepted
@@ -33,7 +33,7 @@ def intercept(cls, method_name, method_interceptor):
     # interceptor result will be returned. no auto-return of original method
     # return value will be performed.
     original_method = getattr(cls, method_name)
-    intercepted = _interceptor(original_method, method_interceptor)
+    intercepted = _instancemethod_interceptor(original_method, method_interceptor)
     return type(cls)(cls.__name__, (cls, ), {method_name:intercepted} )
     
 
