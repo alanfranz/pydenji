@@ -24,6 +24,17 @@ class _Context(object):
     def proceed(self):
         return self.method(self.instance, *self.args, **self.kwargs)
 
+def _interceptor_picker(original_method, method_interceptor):
+    # picks the proper interceptor depending on original_method type.
+    if getattr(original_method, "im_func", None):
+        if getattr(original_method, "im_self"):
+            raise NotImplementedError, "Not yet implemented."
+        else:
+            return _instancemethod_interceptor(original_method, method_interceptor)
+    else:
+        raise NotImplementedError, "Not yet implemented."
+
+
 def _instancemethod_interceptor(original_method, method_interceptor):
     def intercepted(instance, *args, **kwargs):
         return method_interceptor(_Context(instance, original_method, args, kwargs))
@@ -33,7 +44,7 @@ def intercept(cls, method_name, method_interceptor):
     # interceptor result will be returned. no auto-return of original method
     # return value will be performed.
     original_method = getattr(cls, method_name)
-    intercepted = _instancemethod_interceptor(original_method, method_interceptor)
+    intercepted = _interceptor_picker(original_method, method_interceptor)
     return type(cls)(cls.__name__, (cls, ), {method_name:intercepted} )
     
 
