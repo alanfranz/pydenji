@@ -25,7 +25,8 @@ class MyRemoteFetchService(object):
 
     def __init__(self, props):
         self.target_address = props["target_address"]
-    
+
+    #automagic singleton
     def network_service(self):
         return SomeService(self.networked_factory)
 
@@ -49,14 +50,15 @@ class TestSimpleConfiguration(TestCase):
         except:
             pass
 
-    def test_basic(self):
+    def test_network_service_fetching(self):
         context = AppContext(MyRemoteFetchService())
-        print context._names_factories
         network_service = context.get_object("network_service")
         network_service.performAction()
-        # connector = context.get_object("connector")
-        #print connector.destination_filename_prefix
+        # the file should be created by connector instance, whose prefix was overriden.
         self.assertTrue(os.path.exists("/tmp/pydenji_simple_configuration_test_somenetworkaddress"), "missing file it should be created")
         os.unlink("/tmp/pydenji_simple_configuration_test_somenetworkaddress")
+
+
+    
 
 

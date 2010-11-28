@@ -21,6 +21,7 @@ class SomeConnector(object):
     def connect(self):
         # just mark it did something. # FIXME: Windows support?
         f = open(self.destination_filename_prefix + self.address, "w").write("something")
+    
 
 
 class SomeResource(object):
