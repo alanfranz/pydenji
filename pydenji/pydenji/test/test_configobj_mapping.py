@@ -87,6 +87,18 @@ class TestConfigObjMappingTestCase(unittest.TestCase):
     def test_properties_raises_error_on_unset_properties(self):
         config_cls = inject_properties_from(["[MockConfig2]", "property1=123"])(MockConfig2)
         self.assertRaises(ValueError, config_cls)
+        
+        
+    def test_later_co_sources_override_previous_values(self):
+        class MockConfig1(object):
+            def __init__(self, props):
+                self.props = props
+
+        config = inject_properties_from(["[MockConfig1]", "property1=123"], ["[MockConfig1]", "property1=456"])(MockConfig1)()
+        self.assertEquals(456, config.props["property1"])
+
+
+
 
 
 

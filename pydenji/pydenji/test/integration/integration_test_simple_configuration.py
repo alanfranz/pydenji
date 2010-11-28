@@ -57,8 +57,3 @@ class TestSimpleConfiguration(TestCase):
         # the file should be created by connector instance, whose prefix was overriden.
         self.assertTrue(os.path.exists("/tmp/pydenji_simple_configuration_test_somenetworkaddress"), "missing file it should be created")
         os.unlink("/tmp/pydenji_simple_configuration_test_somenetworkaddress")
-
-
-    
-
-

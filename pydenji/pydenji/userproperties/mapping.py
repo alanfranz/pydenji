@@ -37,9 +37,11 @@ class ConfigObjPropertyMapper(object):
         return config_cls
 
 class inject_properties_from(object):
-    def __init__(self, configobj_source, target_kwarg="props"):
-        self._co = ConfigObj(configobj_source, unrepr=True)
-        self._target = target_kwarg
+    def __init__(self, base_co_src, *other_co_srcs, **kwargs):
+        self._co = ConfigObj(base_co_src, unrepr=True)
+        for other_src in other_co_srcs:
+            self._co.merge(ConfigObj(other_src, unrepr=True))
+        self._target = kwargs.pop("target_kwarg", "props")
         
     def __call__(self, config_cls):
         original_init = config_cls.__init__
