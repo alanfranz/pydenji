@@ -36,6 +36,9 @@ class ConfigObjPropertyMapper(object):
         config_cls.__init__ = new_init
         return config_cls
 
+# TODO: this might force property redefinition. We might think about
+# a "global" namespace where each and every property is globally defined,
+# and might be overriden later.
 class inject_properties_from(object):
     def __init__(self, base_co_src, *other_co_srcs, **kwargs):
         self._co = ConfigObj(base_co_src, unrepr=True)
