@@ -116,7 +116,7 @@ class TestConfigObjMappingTestCase(unittest.TestCase):
             def __init__(self, props):
                 self.props = props
 
-        config = inject_properties_from(["property1=123"], ["property2=456"])(MockConfig1)()
+        config = inject_properties_from(["[global]", "property1=123"])(MockConfig1)()
         self.assertEquals(123, config.props["property1"])
 
 

@@ -3,7 +3,7 @@
 # (C) 2010 Alan Franzoni.
 from inspect import getabsfile
 from compiler import parseFile
-from configobj import ConfigObj
+from configobj import ConfigObj, Section
 from collections import Mapping
 from pydenji.userproperties.properties import UserProperties
 from pydenji.userproperties.codescraper import get_getitem_accesses
@@ -68,10 +68,16 @@ class inject_properties_from(object):
             raise ValueError, "Some property is missing: %s" % " ".join(difference)
 
     def _get_config_dict_for(self, section_name):
+        # we want global_dict to be a ConfigObj section in order to support merging.
+        global_dict = self._co.get("global", ConfigObj(["[global]"])["global"])
+        if not isinstance(global_dict, Section):
+            raise TypeError, "'%s' must be a section header" % "global"
+
         config_dict = self._co.get(section_name, {})
         if not isinstance(config_dict, Mapping):
             raise TypeError, "'%s' must be a section header or dict." % section_name
-        return config_dict
+        global_dict.merge(config_dict)
+        return global_dict
 
 
 
