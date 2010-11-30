@@ -119,6 +119,14 @@ class TestConfigObjMappingTestCase(unittest.TestCase):
         config = inject_properties_from(["[global]", "property1=123"])(MockConfig1)()
         self.assertEquals(123, config.props["property1"])
 
+    def test_config_specific_properties_override_global_ones(self):
+        class MockConfig1(object):
+            def __init__(self, props):
+                self.props = props
+
+        config = inject_properties_from(["[global]", "property1=123", "[MockConfig1]",
+                        "property1=456"])(MockConfig1)()
+        self.assertEquals(456, config.props["property1"])
 
 
 
