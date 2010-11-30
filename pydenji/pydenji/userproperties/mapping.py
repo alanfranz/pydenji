@@ -53,10 +53,7 @@ class inject_properties_from(object):
             # do we need to do something like an override?
             if self._target in kwargs:
                 raise ValueError, "'%s' kw args was supplied already!"
-            config_dict = self._co.get(config_cls.__name__, {})
-            if not isinstance(config_dict, Mapping):
-                raise TypeError, "'%s' must be a section header or dict." % config_cls.__name__
-            props = UserProperties(config_dict)
+            props = UserProperties(self._get_config_dict_for(config_cls.__name__))
             kwargs[self._target] = props
             original_init(new_self, *args, **kwargs)
             self._verify_no_missing_property(new_self, props, self._target)
@@ -70,7 +67,11 @@ class inject_properties_from(object):
         if difference:
             raise ValueError, "Some property is missing: %s" % " ".join(difference)
 
-
+    def _get_config_dict_for(self, section_name):
+        config_dict = self._co.get(section_name, {})
+        if not isinstance(config_dict, Mapping):
+            raise TypeError, "'%s' must be a section header or dict." % section_name
+        return config_dict
 
 
 
