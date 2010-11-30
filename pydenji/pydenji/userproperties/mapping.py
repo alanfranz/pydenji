@@ -4,6 +4,7 @@
 from inspect import getabsfile
 from compiler import parseFile
 from configobj import ConfigObj
+from collections import Mapping
 from pydenji.userproperties.properties import UserProperties
 from pydenji.userproperties.codescraper import get_getitem_accesses
 from pydenji._aop.intercept import intercept
@@ -52,7 +53,10 @@ class inject_properties_from(object):
             # do we need to do something like an override?
             if self._target in kwargs:
                 raise ValueError, "'%s' kw args was supplied already!"
-            props = UserProperties(self._co[config_cls.__name__])
+            config_dict = self._co.get(config_cls.__name__, {})
+            if not isinstance(config_dict, Mapping):
+                raise TypeError, "'%s' must be a section header or dict." % config_cls.__name__
+            props = UserProperties(config_dict)
             kwargs[self._target] = props
             original_init(new_self, *args, **kwargs)
             self._verify_no_missing_property(new_self, props, self._target)

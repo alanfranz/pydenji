@@ -97,6 +97,28 @@ class TestConfigObjMappingTestCase(unittest.TestCase):
         config = inject_properties_from(["[MockConfig1]", "property1=123"], ["[MockConfig1]", "property1=456"])(MockConfig1)()
         self.assertEquals(456, config.props["property1"])
 
+    def test_mapping_should_fail_if_section_name_is_just_a_property(self):
+        class MockConfig1(object):
+            def __init__(self, props):
+                self.props = props
+
+        self.assertRaises(TypeError, inject_properties_from(["MockConfig1=1"])(MockConfig1))
+
+    def test_mapping_should_not_fail_if_config_name_missing(self):
+        class MockConfig1(object):
+            def __init__(self, props):
+                self.props = props
+
+        config = inject_properties_from(["property1=123"])(MockConfig1)()
+
+    def test_global_property_injection(self):
+        class MockConfig1(object):
+            def __init__(self, props):
+                self.props = props
+
+        config = inject_properties_from(["property1=123"], ["property2=456"])(MockConfig1)()
+        self.assertEquals(123, config.props["property1"])
+
 
 
 
