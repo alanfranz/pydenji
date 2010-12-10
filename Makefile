@@ -1,7 +1,9 @@
+PYTHON=python
+
 bootstrap: .installed.cfg
 
 .installed.cfg:
-		python bootstrap.py --distribute && bin/buildout
+		$(PYTHON) bootstrap.py --distribute && bin/buildout
 
 clean:
 		rm -rf bin eggs develop-eggs parts .installed.cfg _trial_temp src/build src/dist src/*.egg-info
