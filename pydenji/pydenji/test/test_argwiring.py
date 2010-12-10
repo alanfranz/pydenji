@@ -24,7 +24,24 @@ class  TestArgwiring(unittest.TestCase):
         d = { "pos1":1, }
         self.assertRaises(TypeError, wire, func_to_wire, d )
 
-      
+    def test_positional_additional_arguments_have_precedence(self):
+        d = { "pos1":1, "pos2": 2, "kw1": 3 }
+        obj = wire(func_to_wire, d, "x")
+        self.assertEquals( ("x", 2 ,3,"b"), obj)
+
+    def test_positional_additional_kw_arguments_have_precedence(self):
+        d = { "pos1":1, "pos2": 2, "kw1": 3 }
+        obj = wire(func_to_wire, d, pos2="y")
+        self.assertEquals( (1, "y" ,3, "b"), obj)
+
+    def test_positional_and_kw_arguments_dont_clash(self):
+        d = { "pos1":1, "pos2": 2, "kw1": 3 }
+        obj = wire(func_to_wire, d, 5, pos2="y")
+        self.assertEquals( (5, "y" ,3, "b"), obj)
+
+    def test_overlapping_args_and_kwargs_raise_error(self):
+        d = { "pos1":1, "pos2": 2, "kw1": 3 }
+        self.assertRaises(TypeError, wire, func_to_wire, d, 5, pos1="5")
 
 
 

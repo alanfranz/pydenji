@@ -5,19 +5,37 @@
 # fetches the required args and kwargs for a function from a mapping.
 
 from inspect import getargspec
+# this won't probably work on 2.5
+from itertools import izip_longest
 from pydenji.lib.odict import OrderedDict
 
 _NO_VALUE = object()
 
 
+# this is getting messy. go on testing then refactor pieces out of that.
 def wire(callable_obj, mapping, *additional_args, **additional_kwargs):
-    args, varargs, varkw, defaults = getargspec(callable_obj)
+    # how can we support varargs and varkw?
+    arg_names, varargs, varkw, defaults = getargspec(callable_obj)
 
     # let's determine which args can be fetched from the dict:
     current_arguments = OrderedDict()
 
-    for arg in args:
-        current_arguments[arg] = mapping.get(arg, _NO_VALUE)
+    # additional_args and additional_kwargs should take precedence
+    # on everything. clashes should be explicit.
+    for arg_name, value in filter(lambda x: x[0] is not _NO_VALUE,
+                        izip_longest(arg_names, additional_args,
+                        fillvalue=_NO_VALUE)):
+        current_arguments[arg_name] = value
+        
+    for kw, value in additional_kwargs.iteritems():
+        if current_arguments.get(kw, _NO_VALUE) is not _NO_VALUE:
+            # if it's the same value we should let'em be?
+            raise TypeError, "Overlapping value for '%s' arg." % kw
+        current_arguments[kw] = value
+
+    for arg_name in arg_names:
+        if current_arguments.get(arg_name, _NO_VALUE) is _NO_VALUE:
+            current_arguments[arg_name] = mapping.get(arg_name, _NO_VALUE)
 
     # complete missing args with default args
     for default_value, (arg_name, current_value) in zip(reversed(defaults),
