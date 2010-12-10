@@ -1,3 +1,8 @@
+0.4:
+- support for resource urls
+- support for property configuration
+- support for basic command line property override
+
 0.2:
 - appcontext aware config objects
 - dynamic importer
