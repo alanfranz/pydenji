@@ -43,8 +43,12 @@ class  TestArgwiring(unittest.TestCase):
         d = { "pos1":1, "pos2": 2, "kw1": 3 }
         self.assertRaises(TypeError, wire, func_to_wire, d, 5, pos1="5")
 
+    def test_too_many_args(self):
+        d = { "pos1":1, "pos2": 2, "kw1": 3 }
+        print wire(func_to_wire, d, 1,2,3,4,5)
+        self.assertRaises(TypeError, wire, func_to_wire, d, 1,2,3,4,5)
 
-
+        
 if __name__ == '__main__':
     unittest.main()
 
