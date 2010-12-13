@@ -47,7 +47,7 @@ class  TestArgwiring(unittest.TestCase):
         d = { "pos1":1, "pos2": 2, "kw1": 3 }
         self.assertRaises(TypeError, wire, func_to_wire, d, 1,2,3,4,5)
 
-    def test_positions_are_not_mismatched(self):
+    def test_argument_positions_do_not_get_mismatched(self):
         self.assertRaises(TypeError, wire, func_to_wire, {}, 1, kw1=1, kw2=4)
 
         
