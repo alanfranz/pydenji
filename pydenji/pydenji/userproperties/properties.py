@@ -15,6 +15,9 @@ class _FrozenDict(object):
     def keys(self):
         return self._d.keys()
 
+    def __contains__(self, key):
+        return key in self._d
+
 
 def UserProperties(property_mapping):
     return _FrozenDict(property_mapping)
