@@ -6,8 +6,11 @@
 
 from inspect import getargspec
 
+# important notice: every "dynamic proxy" function accepting variable positional
+# and keyword arguments might disrupt wiring!
+
 def wire(callable_obj, mapping, *call_args, **call_kwargs):
-    all_arg_names, ignore, ignore, ignore  = getargspec(callable_obj)
+    all_arg_names, ignore, ignore, ignore = getargspec(callable_obj)
 
     # we might want to fetch something from our mapping to fill in
     # named arguments that were not passed, without overwriting

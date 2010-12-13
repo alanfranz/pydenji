@@ -4,12 +4,12 @@
 
 import unittest
 
-from pydenji.config.argwiring import wire, _NO_VALUE
+from pydenji.config.argwiring import wire
 
 def func_to_wire(pos1, pos2, kw1="a", kw2="b"):
     return (pos1, pos2, kw1, kw2)
 
-class  TestArgwiring(unittest.TestCase):
+class TestArgwiring(unittest.TestCase):
     def test_all_nonvariable_arguments_can_be_wired_from_dictionary(self):
         d = { "pos1":1, "pos2": 2, "kw1": 3, "kw2": 4 }
         obj = wire(func_to_wire, d)
@@ -41,7 +41,7 @@ class  TestArgwiring(unittest.TestCase):
 
     def test_overlapping_args_and_kwargs_raise_error(self):
         d = { "pos1":1, "pos2": 2, "kw1": 3 }
-        #self.assertRaises(TypeError, wire, func_to_wire, d, 5, pos1="5")
+        self.assertRaises(TypeError, wire, func_to_wire, d, 5, pos1="5")
 
     def test_too_many_args_raise_typeerror(self):
         d = { "pos1":1, "pos2": 2, "kw1": 3 }
@@ -49,6 +49,35 @@ class  TestArgwiring(unittest.TestCase):
 
     def test_argument_positions_do_not_get_mismatched(self):
         self.assertRaises(TypeError, wire, func_to_wire, {}, 1, kw1=1, kw2=4)
+
+    def test_arguments_in_excess_do_not_interfer_with_instantiation(self):
+        d = { "some":1, "argument": 2}
+        obj = wire(func_to_wire, d, 1, 2)
+
+
+def varposargs_func(arg1, *args):
+    return (arg1, args)
+
+def varkwargs_func(arg1, **kwargs):
+    return (arg1, kwargs)
+
+def varboth_func(*args, **kwargs):
+    return (args, kwargs)
+
+class TestVarArgsWiring(unittest.TestCase):
+    def test_varargs_are_forwarded(self):
+        obj = wire(varposargs_func, {}, 1, 2, 3)
+        self.assertEquals((1, (2, 3)), obj)
+
+    def test_varkw_are_forwarded(self):
+        obj = wire(varkwargs_func, {"a": 5}, 1, a=2, b=3)
+        self.assertEquals((1, {"a":2, "b":3}), obj)
+
+    def test_varargs_and_varkw_are_forwarded(self):
+        obj = wire(varboth_func, {}, 1, a=2, b=3)
+        self.assertEquals(((1,), {"a":2, "b":3}), obj)
+
+
 
         
 if __name__ == '__main__':
