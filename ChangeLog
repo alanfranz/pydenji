@@ -1,3 +1,6 @@
+- support for easy object wiring
+
+
 0.4:
 - support for resource urls
 - support for property configuration

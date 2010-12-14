@@ -16,6 +16,9 @@ class AppContext(object):
         conf.set_app_context(self)
         self._start(self._names_factories)
 
+    def __contains__(self, key):
+        return key in self._names_factories
+
     def get_object(self, name, *args, **kwargs):
         try:
             factory = self._names_factories[name]
