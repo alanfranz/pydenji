@@ -11,12 +11,13 @@ from pydenji.config.pythonconfig import Configuration
 
 class TestAppContext(TestCase):
     def test_appcontext_allows_retrieving_by_name(self):
-        @Configuration
+
         class MockConf(object):
             @singleton
             def something(self):
                 return 1
-
+        MockConf = Configuration(MockConf)
+        
         context = AppContext(MockConf())
         something = context.get_object("something")
         self.assertEquals(1, something)
@@ -25,17 +26,19 @@ class TestAppContext(TestCase):
         # TODO: this functionality might be overlapping to CompositeConfig.
         # think about it.
         
-        @Configuration
+        
         class MockConf(object):
             @singleton
             def something(self):
                 return 1
+        MockConf = Configuration(MockConf)
 
-        @Configuration
         class OtherConf(object):
             @singleton
             def otherthing(self):
                 return 2
+
+        OtherConf = Configuration(OtherConf)
 
         context = AppContext(MockConf(), OtherConf())
         something = context.get_object("something")
@@ -47,7 +50,7 @@ class TestAppContext(TestCase):
 
     def test_appcontext_fetches_objects_eagerly_when_required(self):
         c = set()
-        @Configuration
+
         class MockConf(object):
             @singleton
             def something(self):
@@ -56,6 +59,8 @@ class TestAppContext(TestCase):
             @singleton
             def _private(self):
                 c.add("private")
+
+        MockConf = Configuration(MockConf)
              
 
         conf = MockConf()
@@ -65,11 +70,12 @@ class TestAppContext(TestCase):
         
     def test_appcontext_fetches_objects_lazily_when_required(self):
         c = []
-        @Configuration
+
         class MockConf(object):
             @singleton.lazy
             def something(self):
                 c.append(True)
+        MockConf = Configuration(MockConf)
 
 
         conf = MockConf()
@@ -84,23 +90,25 @@ class TestAppContext(TestCase):
             def set_app_context(self, context):
                 self.app_context = context
 
-        @Configuration
+
         class MockConf(object):
             @singleton
             def appcontextaware(self):
                 return AppAwareObject()
-
+        MockConf = Configuration(MockConf)
 
         context = AppContext(MockConf())
         aware = context.get_object("appcontextaware")
         self.assertTrue(context is aware.app_context, "context wasn't injected correctly!")
 
     def test_appcontext_gets_injected_on_aware_configuration_objects(self):
-        @Configuration
+
         class MockConf(object):
             @dontconfigure
             def set_app_context(self, context):
                 self.app_context = context
+        
+        MockConf = Configuration(MockConf)
 
         conf = MockConf()
         context = AppContext(conf)
