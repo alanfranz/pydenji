@@ -4,13 +4,29 @@
 from inspect import getabsfile
 from compiler import parseFile
 from configobj import ConfigObj, Section
-from collections import Mapping
+
 from pydenji.userproperties.properties import UserProperties
 from pydenji.userproperties.codescraper import get_getitem_accesses
 from pydenji._aop.intercept import intercept
 
 
 _NO_VALUE = object()
+
+def _get_mapping_types():
+    # this is not exactly nice...
+    mapping_types = [dict]
+    try:
+        from collections import Mapping
+        mapping_types.append(Mapping)
+    except:
+        pass
+
+    from UserDict import UserDict, DictMixin
+    mapping_types.append(UserDict)
+    mapping_types.append(DictMixin)
+
+    return tuple(mapping_types)
+
 
 def map_properties_to_obj(d, obj, map_nonexistent=False):
     for key, value in d.iteritems():
@@ -74,7 +90,7 @@ class inject_properties_from(object):
             raise TypeError, "'%s' must be a section header" % "global"
 
         config_dict = self._co.get(section_name, {})
-        if not isinstance(config_dict, Mapping):
+        if not isinstance(config_dict, _get_mapping_types()):
             raise TypeError, "'%s' must be a section header or dict." % section_name
         global_dict.merge(config_dict)
         return global_dict
