@@ -3,5 +3,5 @@
 # (C) 2010 Alan Franzoni
 
 # compatibility hooks, to be removed.
-from .aware import *
-from .context import *
+#from .aware import *
+#from .context import *
