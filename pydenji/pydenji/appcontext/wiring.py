@@ -3,11 +3,11 @@
 # (C) 2010 Alan Franzoni
 
 from pydenji.config.argwiring import wire
+from itertools import chain
 try:
     from collections import Mapping as _BaseMappingClass
 except ImportError:
     from UserDict import DictMixin as _BaseMappingClass
-from itertools import chain
 
 class NameClashError(Exception):
     pass
