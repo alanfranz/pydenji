@@ -4,7 +4,8 @@
 
 from unittest import TestCase
 
-from pydenji.appcontext import AppContext, is_appcontext_aware
+from pydenji.appcontext.context import AppContext
+from pydenji.appcontext.aware import is_appcontext_aware
 from pydenji.config.contextconfig import ContextConfiguration
 from pydenji.config.pythonconfig import singleton, dontconfigure
 from pydenji.config.pythonconfig import Configuration
