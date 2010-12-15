@@ -19,6 +19,10 @@ class AppContext(object):
     def __contains__(self, key):
         return key in self._names_factories
 
+    def __iter__(self):
+        return self._names_factories.iterkeys()
+
+
     def get_object(self, name, *args, **kwargs):
         try:
             factory = self._names_factories[name]

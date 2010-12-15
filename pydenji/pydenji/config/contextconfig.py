@@ -11,6 +11,7 @@ def _set_app_context(self, context):
     self._pydenji__app_context = context
 
 def _getattr(self, attr):
+    # THIS IS BAD!
     try:
         return lambda *args, **kwargs: self._pydenji__app_context.get_object(attr, *args, **kwargs)
     except:
