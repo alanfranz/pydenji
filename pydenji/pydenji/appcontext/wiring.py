@@ -3,14 +3,17 @@
 # (C) 2010 Alan Franzoni
 
 from pydenji.config.argwiring import wire
-from collections import Mapping as _BaseProxyClass
+try:
+    from collections import Mapping as _BaseMappingClass
+except ImportError:
+    from UserDict import DictMixin as _BaseMappingClass
 from itertools import chain
 
 class NameClashError(Exception):
     pass
 
 # TODO: make this inherit from ABC or from UserDict for 2.5
-class PropertyAndContextMergingProxy(_BaseProxyClass):
+class PropertyAndContextMergingProxy(_BaseMappingClass):
     def __init__(self, context, mapping):
         self._context = context
         self._mapping = mapping
