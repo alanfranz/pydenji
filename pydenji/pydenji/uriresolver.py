@@ -2,8 +2,12 @@
 # -*- coding: utf-8 -*-
 # (C) 2010 Alan Franzoni.
 
-from urlparse import urlparse
+from urlparse import urlparse, uses_netloc
 from pkg_resources import resource_filename
+
+#TODO: remove this sort of "static initializer"
+if "pkg" not in uses_netloc:
+    uses_netloc.append("pkg")
 
 def file_uri_resolver(parsed_uri):
     if not parsed_uri.path.startswith("/"):
