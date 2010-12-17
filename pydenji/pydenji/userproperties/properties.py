@@ -21,6 +21,9 @@ class _FrozenDict(object):
     def __iter__(self):
         return self._d.iterkeys()
 
+    def __repr__(self):
+        return "<FrozenDict(%r)>" % self._d
+
 
 def UserProperties(property_mapping):
     return _FrozenDict(property_mapping)
