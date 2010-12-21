@@ -26,13 +26,13 @@ class RWResource(object):
     _opened = False
     _file_obj = None
 
-    
 
-    def __init__(self, uri, mode, buffering):
+    def __init__(self, uri, mode, buffering, opener=open):
         # this attr is kept for backward compatibility, but will be removed.
         self.filename = self._resolver(uri)
         self._mode = mode
         self._buffering = buffering
+        self._opener = opener
         self._verify_consistency()
 
     def _verify_consistency(self):
@@ -40,17 +40,22 @@ class RWResource(object):
         # if something is wrong.
         pass
 
-    # getting those attrs don't require opening the file. Anything else will open
-    # it and then return its attributes.
-    _nonopen_attrs = ()
-
     def __getattr__(self, attr):
-        if (attr not in self._nonopen_attrs) and (not self._opened):
+        if not self._opened:
             self._open()
         return getattr(self._file_obj, attr)
 
     def _open(self):
-        self._file_obj = open(self.filename, self._mode, self._buffering)
+        self._file_obj = self._opener(self.filename, self._mode, self._buffering)
+        self._opened = True
+
+    @property
+    def mode(self):
+        return self._mode
+
+    @property
+    def name(self):
+        return self.filename
 
 
 class ReadResource(RWResource):
@@ -99,6 +104,7 @@ class ExecutableResource(object):
 
     def __init__(self, uri):
         self.filename = self._resolver(uri)
+        self.name = self.filename
         self._verify_consistency()
 
     def _verify_consistency(self):

@@ -15,6 +15,33 @@ from pydenji.resourceloader import NewFileWriteResource
 from pydenji.resourceloader import ResourceAccessError
 from pydenji.resourceloader import ExecutableResource
 from pydenji.resourceloader import enumerateResources
+from pydenji.resourceloader import RWResource
+
+class MockFile(object):
+    def read(self):
+        return self
+
+class TestRWResource(TestCase):
+    def test_file_does_not_get_opened_if_lazy_attr_called(self):
+        def opener(*args, **kwargs):
+            self.fail("opener function was unexpectedly called.")
+        resource = RWResource("file:///tmp/foo", "w", -1, opener)
+        resource.mode
+        resource.name
+
+    def test_file_does_get_opened_if_not_lazy_attr_called(self):
+        mockfile = MockFile()
+        def opener(*args, **kwargs):
+            return mockfile
+            
+        resource = RWResource("file:///tmp/foo", "w", -1, opener)
+        self.assert_(mockfile is resource.read())
+
+
+
+
+
+
 
 class TestResourceLoader(TestCase):
     # think: existing == accessible, or not?
@@ -157,5 +184,5 @@ class TestResourceEnumerator(TestCase):
 
     def test_enumerator_returns_same_filename_resource_if_file_passed(self):
         rs = enumerateResources(ReadResource(self.tempdir + os.sep + "a"))
-        self.assertEquals(self.tempdir + os.sep + "a", rs[0].filename)
+        self.assertEquals(self.tempdir + os.sep + "a", rs[0].name)
 
