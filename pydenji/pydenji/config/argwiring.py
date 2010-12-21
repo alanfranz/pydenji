@@ -11,7 +11,6 @@ from pydenji._inspect.getcallableargspec import getargspec
 # and keyword arguments might disrupt wiring!
 
 def wire(callable_obj, mapping, *call_args, **call_kwargs):
-    print type(callable_obj), callable_obj
     all_arg_names, ignore, ignore, ignore = getargspec(callable_obj)
 
     # we might want to fetch something from our mapping to fill in
