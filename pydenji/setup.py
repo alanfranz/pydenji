@@ -7,7 +7,7 @@ if sys.version_info[1] < 7:
     requirements.append("importlib")
 
 setup(name='pydenji',
-      version='0.5.0',
+      version='0.6.0',
       description='Dependency Injection Toolkit',
       # add byteplay as soon as it works.
       install_requires=requirements,
