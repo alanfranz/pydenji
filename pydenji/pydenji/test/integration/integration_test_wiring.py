@@ -32,7 +32,7 @@ class MyRemoteFetchService(object):
 
     @dontconfigure
     def set_app_context(self, context):
-        self.wirer = ContextWirer(context, self.props)
+        self.wirer = ArgNameContextWirer(context, self.props)
     
     def network_service(self):
         return self.wirer.wire(SomeService)

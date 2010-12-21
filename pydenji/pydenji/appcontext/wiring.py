@@ -41,7 +41,7 @@ class PropertyAndContextMergingProxy(_BaseMappingClass):
         raise KeyError, "Could not find '%s' in mapping or context either"
     
 
-class ContextWirer(object):
+class ArgNameContextWirer(object):
     def __init__(self, context, mapping):
         self.mergingproxy = PropertyAndContextMergingProxy(context, mapping)
 

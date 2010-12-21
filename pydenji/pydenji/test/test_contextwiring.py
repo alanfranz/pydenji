@@ -3,7 +3,7 @@
 
 import unittest
 
-from pydenji.appcontext.wiring import ContextWirer
+from pydenji.appcontext.wiring import ArgNameContextWirer
 from pydenji.appcontext.wiring import PropertyAndContextMergingProxy
 from pydenji.appcontext.wiring import NameClashError
 
@@ -41,21 +41,21 @@ class TestContextWiring(unittest.TestCase):
     def test_contextwiring_fetches_data_from_mapping_and_context(self):
         context = DummyContext()
         mapping = {"a":1, "b":2}
-        cw = ContextWirer(context, mapping)
+        cw = ArgNameContextWirer(context, mapping)
         wired = cw.wire(factory)
         self.assertEquals((1, 2, Peer()), wired)
 
     def test_call_time_wiring_args_can_override_mapping_values(self):
         context = DummyContext()
         mapping = {"a":1, "b":2}
-        cw = ContextWirer(context, mapping)
+        cw = ArgNameContextWirer(context, mapping)
         wired = cw.wire(factory, 5, b=4)
         self.assertEquals((5, 4, Peer()), wired)
     
     def test_call_time_wiring_args_can_override_context_values(self):
         context = DummyContext()
         mapping = {"a":1, "b":2}
-        cw = ContextWirer(context, mapping)
+        cw = ArgNameContextWirer(context, mapping)
         wired = cw.wire(factory, peer="foo")
         self.assertEquals((1, 2, "foo"), wired)
 
