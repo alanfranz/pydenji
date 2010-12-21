@@ -20,9 +20,19 @@ class ResourceAccessError(IOError):
 class RWResource(object):
     _resolver = staticmethod(resource_filename_resolver)
 
-    def __init__(self, uri, mode):
+    filename = None
+    _mode = None
+    _buffering = None
+    _opened = False
+    _file_obj = None
+
+    
+
+    def __init__(self, uri, mode, buffering):
+        # this attr is kept for backward compatibility, but will be removed.
         self.filename = self._resolver(uri)
         self._mode = mode
+        self._buffering = buffering
         self._verify_consistency()
 
     def _verify_consistency(self):
@@ -30,15 +40,23 @@ class RWResource(object):
         # if something is wrong.
         pass
 
+    # getting those attrs don't require opening the file. Anything else will open
+    # it and then return its attributes.
+    _nonopen_attrs = ()
 
-    def open(self, buffering=-1):
-        return open(self.filename, self._mode, buffering)
+    def __getattr__(self, attr):
+        if (attr not in self._nonopen_attrs) and (not self._opened):
+            self._open()
+        return getattr(self._file_obj, attr)
+
+    def _open(self):
+        self._file_obj = open(self.filename, self._mode, self._buffering)
 
 
 class ReadResource(RWResource):
     def __init__(self, uri, binary=False):
         super(ReadResource, self).__init__(
-            uri, "r" + ("b" if binary else "") )
+            uri, "r" + ("b" if binary else ""), -1)
 
     def _verify_consistency(self):
         verify_path_existence(self.filename, ResourceAccessError)
@@ -61,15 +79,15 @@ class WriteResource(RWResource):
                 self.filename)
 
 def OverwritingWriteResource(uri, binary=False):
-    return WriteResource(uri, "w" + ("b" if binary else ""))
+    return WriteResource(uri, "w" + ("b" if binary else ""), -1)
 
 def AppendingWriteResource(uri, binary=False):
     # TODO: do we need an appender which just appends, e.g. never creates?
-    return WriteResource(uri, "a" + ("b" if binary else ""))
+    return WriteResource(uri, "a" + ("b" if binary else ""), -1)
 
 class NewFileWriteResource(WriteResource):
     def __init__(self, uri, binary=False):
-        super(NewFileWriteResource, self).__init__(uri, "w" + ("b" if binary else ""))
+        super(NewFileWriteResource, self).__init__(uri, "w" + ("b" if binary else ""), -1)
         
     def _verify_consistency(self):
         if os.path.exists(self.filename):

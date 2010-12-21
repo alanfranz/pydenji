@@ -34,7 +34,7 @@ class TestResourceLoader(TestCase):
         # - I should be able to specify additional data for the stream(), e.g. b and +
         # the interface can be limited to stream() & filename
 
-        content = ReadResource("file://" + self.temp.name).open().read()
+        content = ReadResource("file://" + self.temp.name).read()
         self.assertEquals("hello", content)
 
     def test_error_not_existing_resource(self):
@@ -77,7 +77,7 @@ class TestWriteResource(TestCase):
 
     def test_overwriting_allows_writing_to_resource(self):
         resource = OverwritingWriteResource("file://" + self.tempdir + os.sep + "newfile")
-        stream = resource.open()
+        stream = resource
         stream.write("abc")
         stream.close()
 
@@ -90,7 +90,7 @@ class TestWriteResource(TestCase):
         f.close()
 
         resource = AppendingWriteResource("file://" + self.tempdir + os.sep + "newfile")
-        stream = resource.open()
+        stream = resource
         stream.write("fgh")
         stream.close()
         
@@ -99,7 +99,7 @@ class TestWriteResource(TestCase):
 
     def test_appending_writing_resource_creates_if_file_does_not_exist(self):
         resource = AppendingWriteResource("file://" + self.tempdir + os.sep + "newfile")
-        stream = resource.open()
+        stream = resource
         stream.write("fgh")
         stream.close()
 
