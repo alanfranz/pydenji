@@ -22,11 +22,13 @@ setup(name='pydenji',
 
       Small additional tools to help with configuration management are provided
       and can be used when and where are really fit.
+
       """,
       author='Alan Franzoni',
       license='APL 2.0',
       keywords='dependency injection inversion control ioc container',
       author_email='username@franzoni.eu',
       url='http://pydenji.franzoni.eu',
+      download_url='http://pypi.python.org/simple/pydenji',
       packages=find_packages(exclude=["test"])
      )
