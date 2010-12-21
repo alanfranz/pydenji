@@ -11,6 +11,6 @@ clean:
 
 release: clean bootstrap
 		bin/testunits || exit 1
-		rm src/setup.cfg
+		rm pydenji/setup.cfg
 		bin/buildout setup pydenji register sdist upload
-		hg revert src/setup.cfg
+		hg revert pydenji/setup.cfg
