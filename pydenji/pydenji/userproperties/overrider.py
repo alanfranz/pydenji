@@ -6,8 +6,10 @@ from pydenji._aop.intercept import intercept
 
 # TODO: change this name, I don't like it.
 class override_with(object):
-    def __init__(self, configobj_source):
+    def __init__(self, configobj_source, *other_co_srcs):
         self._co = ConfigObj(configobj_source, unrepr=True)
+        for other_src in other_co_srcs:
+            self._co.merge(ConfigObj(other_src, unrepr=True))
 
     def __call__(self, config_cls):
         for section_name in self._co.sections:
