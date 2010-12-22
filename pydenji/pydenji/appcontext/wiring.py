@@ -13,6 +13,9 @@ class NameClashError(Exception):
     pass
 
 # TODO: make this inherit from ABC or from UserDict for 2.5
+# FIXME: this makes it hard to perform proper wiring -> everything should be lazier?
+# when wiring, can't distinguish between factory and instance wiring.
+# we should always pass factories in config?
 class PropertyAndContextMergingProxy(_BaseMappingClass):
     def __init__(self, context, mapping):
         self._context = context

@@ -20,5 +20,9 @@ def wire(callable_obj, mapping, *call_args, **call_kwargs):
         if arg_name in mapping:
             call_kwargs.setdefault(arg_name, mapping[arg_name])
 
-    return callable_obj(*call_args, **call_kwargs)
+    try:
+        return callable_obj(*call_args, **call_kwargs)
+    except TypeError, e:
+        # improve error message rendering on wrong arg number.
+        raise TypeError, "'%s' wiring error: %s" % (callable_obj, e.args[0])
 

@@ -15,8 +15,8 @@ class SomeNetworkedClass(object):
 class SomeConnector(object):
     destination_filename_prefix = None
     
-    def __init__(self, address):
-        self.address = address
+    def __init__(self, target_address):
+        self.address = target_address
 
     def connect(self):
         # just mark it did something. # FIXME: Windows support?
