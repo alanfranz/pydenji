@@ -37,12 +37,6 @@ class TestRWResource(TestCase):
         resource = RWResource("file:///tmp/foo", "w", -1, opener)
         self.assert_(mockfile is resource.read())
 
-
-
-
-
-
-
 class TestResourceLoader(TestCase):
     # think: existing == accessible, or not?
     def setUp(self):
