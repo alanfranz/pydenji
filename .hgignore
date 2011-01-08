@@ -8,8 +8,8 @@ develop-eggs
 .installed.cfg
 bin
 *.swp
-pydenji/build
-pydenji/dist
+build
+dist
 parts
 TODO
 _trial_temp
