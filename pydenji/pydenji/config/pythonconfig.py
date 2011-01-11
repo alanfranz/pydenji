@@ -83,23 +83,6 @@ def _configure_with(cls, configure_with):
             configured_dict[clsattr] = configure_with(attrvalue)
     return configured_dict
 
-#_NO_VALUE = object()
-#
-#def _get_propsetter_intercepted(cls):
-#    def propsetter_init_interceptor(context):
-#        context.proceed()
-#        instance = context.instance
-#
-#        #TODO: think twice. Is this a good way to do it? maybe ast parsing would be FAR better.
-#        # something explict to require properties...
-#
-#        required_properties = getattr(instance, "required_properties")
-#        for propname in required_properties:
-#            if getattr(instance, propname,  _NO_VALUE) is _NO_VALUE:
-#                setattr(instance, propname, Placeholder(propname))
-#
-#    return intercept(cls, "__init__", propsetter_init_interceptor)
-
 def Configuration(cls, configure_with=singleton, suffix=""):
     """
     Makes all public, unwrapped methods *eager singletons* by default.
