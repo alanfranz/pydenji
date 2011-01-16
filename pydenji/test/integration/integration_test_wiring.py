@@ -57,6 +57,10 @@ class DisableTestSimpleConfiguration(TestCase):
         except:
             pass
 
+    def test_dummy(self):
+        # prevent zc.recipe.testrunner from complaining
+        pass
+
     def disable_test_network_service_fetching(self):
         context = AppContext(MyRemoteFetchService())
         network_service = context.get_object("network_service")

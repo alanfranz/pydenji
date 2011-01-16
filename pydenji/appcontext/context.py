@@ -6,6 +6,7 @@ from pydenji.config.pythonconfig import is_object_factory, is_eager
 from pydenji.appcontext.aware import is_appcontext_aware
 from pydenji.config.composite import CompositeConfig
 
+
 class UnconfiguredError(Exception):
     pass
 
