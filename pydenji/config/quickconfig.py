@@ -29,6 +29,8 @@ class QuickConfig(object):
             except ResourceAccessError:
                 if not self._ignore_missing:
                     raise
+        if not prop_resources:
+            return lambda x: x
         return inject_properties_from(*prop_resources)
 
     def _get_overrider(self):
@@ -40,6 +42,8 @@ class QuickConfig(object):
             except ResourceAccessError:
                 if not self._ignore_missing:
                     raise
+        if not override_resources:
+            return lambda x: x
         return override_with(*override_resources)
         
 
