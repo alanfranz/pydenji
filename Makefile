@@ -25,7 +25,7 @@ release: clean buildout
 		sed -i.old -e "s/REPLACE_WITH_VERSION/\"$(VER)\"/g" setup.py
 		hg commit -m "Version setup for $(VER)" setup.py
 		hg tag v$(VER)
-		bin/buildout setup . clean sdist
+		bin/buildout setup . register clean sdist upload
 		cp setup.py.old setup.py
 		hg commit -m "Restore non-release setup.py file."
 		rm setup.py.old
