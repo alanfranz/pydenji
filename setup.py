@@ -6,10 +6,13 @@ requirements = ["configobj", "byteplay==0.2"]
 if sys.version_info[1] < 7:
     requirements.append("importlib")
 
+# this is a quick hack again... I hope they might just stop :-)
+
+
 setup(name='pydenji',
       description='Dependency Injection Toolkit',
       # add byteplay as soon as it works.
-      version=REPLACE_WITH_VERSION,
+      version=open("version.txt").read(),
       install_requires=requirements,
       long_description="""
       Dependency Injection Toolkit.
@@ -30,5 +33,6 @@ setup(name='pydenji',
       author_email='username@franzoni.eu',
       url='http://pydenji.franzoni.eu',
       download_url='http://pypi.python.org/simple/pydenji',
-      packages=find_packages(exclude=["test"])
+      packages=find_packages(exclude=["test"]),
+      setup_requires=["setuptools_hg"],
      )
