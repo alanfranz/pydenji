@@ -22,13 +22,12 @@ release: clean buildout
 		# [ "" == "`hg status`" ] || ( echo "Working copy must be clean in order to perform a release." ; exit 1 )
 		bin/testunits 
 		bin/integrationtests
-		sed -i.old -e "s/REPLACE_WITH_VERSION/\"$(VER)\"/g" setup.py
+		echo "$(VER)" > version.txt
 		hg commit -m "Version setup for $(VER)" setup.py
 		hg tag v$(VER)
 		bin/buildout setup . register clean sdist upload
-		cp setup.py.old setup.py
-		hg commit -m "Restore non-release setup.py file."
-		rm setup.py.old
+		echo "$(VER)dev" > version.txt
+		hg commit -m "Update development version"
 
 
 
