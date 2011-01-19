@@ -1,0 +1,17 @@
+Changelog for xyz
+=================
+
+0.6 (unreleased)
+----------------
+
+0.5.5 (2011-01-19)
+----------------
+- Support for easy object wiring
+
+0.4 (2010-10-10)
+----------------
+- support for resource urls
+- support for property configuration
+- support for basic command line property override
+- appcontext aware config objects
+- dynamic importer
