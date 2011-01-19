@@ -12,7 +12,7 @@ setup(name='pydenji',
       # add byteplay as soon as it works.
       version='0.5.6dev',
       install_requires=requirements,
-      long_description=open("README").read(),,
+      long_description=open("README").read(),
       author='Alan Franzoni',
       license='APL 2.0',
       keywords='dependency injection inversion control ioc container',
