@@ -19,5 +19,4 @@ setup(name='pydenji',
       author_email='username@franzoni.eu',
       url='http://pypi.python.org/simple/pydenji',
       packages=find_packages(exclude=["test"]),
-      setup_requires=["setuptools_hg"],
      )
