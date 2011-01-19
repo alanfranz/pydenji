@@ -17,17 +17,9 @@ clean:
 distclean: clean
 		rm -rf bin eggs develop-eggs .installed.cfg parts
 
-VER=$(shell $(PYTHON) get_hg_version.py)
 release: clean buildout
-		# [ "" == "`hg status`" ] || ( echo "Working copy must be clean in order to perform a release." ; exit 1 )
+		[ "" == "`hg status`" ] || ( echo "Working copy must be clean in order to perform a release." ; exit 1 )
 		bin/testunits 
 		bin/integrationtests
-		echo "$(VER)" > version.txt
-		hg commit -m "Version setup for $(VER)" setup.py
-		hg tag v$(VER)
-		bin/buildout setup . register clean sdist upload
-		echo "$(VER)dev" > version.txt
-		hg commit -m "Update development version"
-
-
-
+		bin/buildout install releaser
+		bin/fullrelease
