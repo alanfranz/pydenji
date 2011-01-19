@@ -12,7 +12,7 @@ if sys.version_info[1] < 7:
 setup(name='pydenji',
       description='Dependency Injection Toolkit',
       # add byteplay as soon as it works.
-      version='0.5.4',
+      version='0.5.5dev',
       install_requires=requirements,
       long_description="""
       Dependency Injection Toolkit.
