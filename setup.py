@@ -17,7 +17,7 @@ setup(name='pydenji',
       license='APL 2.0',
       keywords='dependency injection inversion control ioc container',
       author_email='username@franzoni.eu',
-      download_url='http://pypi.python.org/simple/pydenji',
+      url='http://pypi.python.org/simple/pydenji',
       packages=find_packages(exclude=["test"]),
       setup_requires=["setuptools_hg"],
      )
