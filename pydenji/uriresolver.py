@@ -3,7 +3,7 @@
 # (C) 2010 Alan Franzoni.
 
 from urlparse import urlparse, uses_netloc
-from pkg_resources import resource_filename
+from pkg_resources import resource_filename, Requirement
 
 #TODO: remove this sort of "static initializer"
 if "pkg" not in uses_netloc:
@@ -19,10 +19,14 @@ def file_uri_resolver(parsed_uri):
 def package_uri_resolver(parsed_uri):
     return resource_filename(parsed_uri.netloc, parsed_uri.path)
 
+def requirement_uri_resolver(parsed_uri):
+    return resource_filename(Requirement.parse(parsed_uri.netloc), parsed_uri.path)
+
 supported_schemes = {
     "file" : file_uri_resolver,
     "" : file_uri_resolver,
     "pkg": package_uri_resolver,
+    "req": requirement_uri_resolver,
 }
 
 def resource_filename_resolver(resource_uri):
