@@ -29,6 +29,3 @@ class TestPackageResolver(TestCase):
         self.assertEquals(os.path.abspath(__file__.rstrip("co")), resolved)
 
 
-if __name__ == '__main__':
-    unittest.main()
-
