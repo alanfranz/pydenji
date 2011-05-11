@@ -37,6 +37,15 @@ class TestRWResource(TestCase):
         resource = RWResource("file:///tmp/foo", "w", -1, opener)
         self.assert_(mockfile is resource.read())
 
+    def test_lazy_resource_is_iterable(self):
+
+        def opener(*args, **kwargs):
+            return ["a", "b", "c"]
+
+        resource = RWResource("file:///tmp/foo", "w", -1, opener)
+        self.assertEquals(["a", "b", "c"], list(resource))
+
+
 class TestResourceLoader(TestCase):
     # think: existing == accessible, or not?
     def setUp(self):

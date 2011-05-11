@@ -45,6 +45,11 @@ class RWResource(object):
             self._open()
         return getattr(self._file_obj, attr)
 
+    def __iter__(self):
+        if not self._opened:
+            self._open()
+        return iter(self._file_obj)
+
     def _open(self):
         self._file_obj = self._opener(self.filename, self._mode, self._buffering)
         self._opened = True
