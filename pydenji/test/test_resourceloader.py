@@ -45,6 +45,13 @@ class TestRWResource(TestCase):
         resource = RWResource("file:///tmp/foo", "w", -1, opener)
         self.assertEquals(["a", "b", "c"], list(resource))
 
+    def test_lazy_resource_supports_context_managers(self):
+        mockfile = NamedTemporaryFile()
+        def opener(*args, **kwargs):
+            return mockfile
+
+        with RWResource("file:///tmp/foo", "w", -1, opener) as myfile:
+            self.assert_(mockfile is myfile)
 
 class TestResourceLoader(TestCase):
     # think: existing == accessible, or not?
