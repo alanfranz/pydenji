@@ -3,7 +3,11 @@ from setuptools import setup, find_packages
 import sys
 
 # quick hack, will probably do something better later.
-requirements = ["configobj", "byteplay==0.2"]
+requirements = [
+        "configobj",
+        "byteplay==0.2",
+        "ducktypes>0.2.0, <0.3.0dev"
+        ]
 if sys.version_info[1] < 7:
     requirements.append("importlib")
 
