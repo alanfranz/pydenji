@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # (C) 2010 Alan Franzoni
 
-from pydenji.appcontext.aware import is_appcontext_aware
+from pydenji.appcontext.aware import AppContextAware
 from pydenji.config.pythonconfig import Configuration
 from pydenji.config.pythonconfig import singleton
 
@@ -28,7 +28,7 @@ def ContextConfiguration(cls, configure_with=singleton, suffix=""):
     # it might be appcontext aware but we
     # could not detect it without ABCs...
     # TODO: think about that.
-    if is_appcontext_aware(ConfigClass):
+    if getattr(ConfigClass, "set_app_context", None):
         # just return it, it's already got whatever it needs. (maybe?)
         # TODO: let's think if this can do any harm.
         return ConfigClass

@@ -5,7 +5,6 @@
 from functools import partial
 from types import UnboundMethodType
 
-from pydenji.appcontext.aware import is_appcontext_aware
 from pydenji._aop.intercept import intercept
 from pydenji.placeholders import Placeholder
 

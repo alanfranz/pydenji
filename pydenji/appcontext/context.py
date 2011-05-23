@@ -3,7 +3,7 @@
 # (C) 2010 Alan Franzoni.
 
 from pydenji.config.pythonconfig import is_object_factory, is_eager
-from pydenji.appcontext.aware import is_appcontext_aware
+from pydenji.appcontext.aware import AppContextAware
 from pydenji.config.composite import CompositeConfig
 
 
@@ -41,7 +41,7 @@ class AppContext(object):
         # even though the object is a singleton. While it should make no harm,
         # we should think about it, might it do any harm?
         obj = factory(*args, **kwargs)
-        if is_appcontext_aware(obj):
+        if isinstance(obj, AppContextAware):
             obj.set_app_context(self)
         return obj
 
