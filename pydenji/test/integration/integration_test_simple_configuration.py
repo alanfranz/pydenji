@@ -52,7 +52,7 @@ class TestSimpleConfiguration(TestCase):
 
     def test_network_service_fetching(self):
         context = AppContext(MyRemoteFetchService())
-        network_service = context.get_object("network_service")
+        network_service = context.provide("network_service")
         network_service.performAction()
         # the file should be created by connector instance, whose prefix was overriden.
         self.assertTrue(os.path.exists("/tmp/pydenji_simple_configuration_test_somenetworkaddress"), "missing file it should be created")

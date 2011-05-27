@@ -35,7 +35,7 @@ class TestAppContext(TestCase):
         MockConf = Configuration(MockConf)
         
         context = AppContext(MockConf())
-        something = context.get_object("something")
+        something = context.provide("something")
         self.assertEquals(1, something)
 
     def test_appcontext_supports_multiple_configs(self):
@@ -57,9 +57,9 @@ class TestAppContext(TestCase):
         OtherConf = Configuration(OtherConf)
 
         context = AppContext(MockConf(), OtherConf())
-        something = context.get_object("something")
+        something = context.provide("something")
         self.assertEquals(1, something)
-        otherthing = context.get_object("otherthing")
+        otherthing = context.provide("otherthing")
         self.assertEquals(2, otherthing)
 
 
@@ -114,7 +114,7 @@ class TestAppContext(TestCase):
         MockConf = Configuration(MockConf)
 
         context = AppContext(MockConf())
-        aware = context.get_object("appcontextaware")
+        aware = context.provide("appcontextaware")
         self.assertTrue(context is aware.app_context, "context wasn't injected correctly!")
 
     def test_appcontext_gets_injected_on_aware_configuration_objects(self):
@@ -146,7 +146,7 @@ class TestGlobalConfig(TestCase):
         other = Configuration(Other)()
 
         context = AppContext(one, other)
-        self.assertEquals(4, context.get_object("relies_on_other"))
+        self.assertEquals(4, context.provide("relies_on_other"))
 
 
     

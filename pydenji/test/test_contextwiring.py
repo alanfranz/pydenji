@@ -23,7 +23,7 @@ class Peer(object):
                 
 
 class DummyContext(object):
-    def get_object(self, name, *args, **kwargs):
+    def provide(self, name, *args, **kwargs):
         if name != "peer":
             raise KeyError, "Can't handle anything different from peer"
         return Peer(*args, **kwargs)

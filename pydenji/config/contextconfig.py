@@ -13,7 +13,7 @@ def _set_app_context(self, context):
 def _getattr(self, attr):
     # THIS IS BAD!
     try:
-        return lambda *args, **kwargs: self._pydenji__app_context.get_object(attr, *args, **kwargs)
+        return lambda *args, **kwargs: self._pydenji__app_context.provide(attr, *args, **kwargs)
     except:
         # TODO: better error interception! just intercept what we
         # need to handle.

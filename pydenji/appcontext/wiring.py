@@ -40,7 +40,7 @@ class PropertyAndContextMergingProxy(_BaseMappingClass):
             return self._mapping[key]
         elif key in self._context:
             # TODO: support arguments?
-            return self._context.get_object(key)
+            return self._context.provide(key)
         raise KeyError, "Could not find '%s' in mapping or context either"
     
 

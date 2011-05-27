@@ -24,7 +24,7 @@ class AppContext(object):
         return self._names_factories.iterkeys()
 
 
-    def get_object(self, name, *args, **kwargs):
+    def provide(self, name, *args, **kwargs):
         try:
             factory = self._names_factories[name]
         except KeyError:
