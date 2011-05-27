@@ -15,7 +15,7 @@ from pydenji.config.contextconfig import ContextConfiguration
 from pydenji.appcontext.context import AppContext
 from pydenji.userproperties.mapping import inject_properties_from
 from pydenji.userproperties.overrider import override_with
-from pydenji.config.pythonconfig import provide_all_singletons, prototype, singleton, dontconfigure
+from pydenji.config.provider import provide_all_singletons, prototype, singleton, dontconfigure
 from pydenji.uriresolver import resource_filename_resolver as rfr
 from pydenji.placeholders import Placeholder
 

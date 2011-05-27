@@ -3,8 +3,8 @@
 # (C) 2010 Alan Franzoni
 
 from pydenji.appcontext.aware import AppContextAware
-from pydenji.config.pythonconfig import provide_all_singletons
-from pydenji.config.pythonconfig import singleton
+from pydenji.config.provider import provide_all_singletons
+from pydenji.config.provider import singleton
 
 
 def _set_app_context(self, context):

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # (C) 2010 Alan Franzoni
 
-from pydenji.config.pythonconfig import is_object_factory, dontconfigure
+from pydenji.config.provider import is_object_factory, dontconfigure
 from pydenji.appcontext.aware import AppContextAware
 
 class NamingClashException(Exception):

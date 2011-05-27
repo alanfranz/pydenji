@@ -12,7 +12,7 @@ from pydenji.test.integration.simple_app import *
 from pydenji.appcontext.context import AppContext
 from pydenji.userproperties.mapping import inject_properties_from
 from pydenji.userproperties.overrider import override_with
-from pydenji.config.pythonconfig import prototype, singleton
+from pydenji.config.provider import prototype, singleton
 from pydenji.config.quickconfig import QuickConfig
 from pydenji.uriresolver import resource_filename_resolver as rfr
 from pydenji.placeholders import Placeholder

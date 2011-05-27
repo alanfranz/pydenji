@@ -3,7 +3,7 @@
 # (C) 2010 Alan Franzoni
 
 from pydenji.resourceloader import ResourceAccessError
-from pydenji.config.pythonconfig import provide_all_singletons
+from pydenji.config.provider import provide_all_singletons
 from pydenji.userproperties.mapping import inject_properties_from
 from pydenji.userproperties.overrider import override_with
 from pydenji.resourceloader import ReadResource, ResourceAccessError

@@ -120,3 +120,4 @@ def provide_all_singletons(cls, configure_with=singleton, suffix=""):
 
 
 
+

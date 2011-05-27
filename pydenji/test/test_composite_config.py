@@ -5,7 +5,7 @@
 from unittest import TestCase
 
 from pydenji.config.composite import CompositeConfig, NamingClashException
-from pydenji.config.pythonconfig import prototype, singleton
+from pydenji.config.provider import prototype, singleton
 
 class FirstConfig(object):
     @singleton

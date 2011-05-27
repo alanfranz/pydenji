@@ -3,8 +3,8 @@
 
 from unittest import TestCase
 
-from pydenji.config.pythonconfig import provide_all_singletons, prototype, singleton, dontconfigure
-from pydenji.config.pythonconfig import is_object_factory, is_eager, _CONFIGURED_OBJECT_FACTORY
+from pydenji.config.provider import provide_all_singletons, prototype, singleton, dontconfigure
+from pydenji.config.provider import is_object_factory, is_eager, _CONFIGURED_OBJECT_FACTORY
 
 class TestConfig(TestCase):
     def test_config_configures_undecorated_public_methods(self):

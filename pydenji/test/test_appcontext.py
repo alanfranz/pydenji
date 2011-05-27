@@ -7,8 +7,8 @@ from unittest import TestCase
 from pydenji.appcontext.context import AppContext, UnknownProviderException
 from pydenji.appcontext.aware import AppContextAware
 from pydenji.config.contextconfig import ContextConfiguration
-from pydenji.config.pythonconfig import singleton, dontconfigure
-from pydenji.config.pythonconfig import provide_all_singletons
+from pydenji.config.provider import singleton, dontconfigure
+from pydenji.config.provider import provide_all_singletons
 
 
 class TestAppContext(TestCase):
