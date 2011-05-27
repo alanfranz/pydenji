@@ -60,15 +60,6 @@ class AppContext(object):
             obj.set_app_context(self)
         return obj
 
-#    @staticmethod
-#    def _get_all_factories(config):
-#        # TODO: refactor using a list comprehension/filter expr.
-#        names_factories = {}
-#        for attr in dir(config):
-#            value = getattr(config, attr)
-#            if is_object_factory(value):
-#                names_factories[attr] = value
-#        return names_factories
 
 
 
