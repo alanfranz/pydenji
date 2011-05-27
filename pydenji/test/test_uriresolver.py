@@ -28,7 +28,11 @@ class TestPackageResolver(TestCase):
         # must strip Cs and Os just in case we're running from pyc or pyo.
         self.assertEquals(os.path.abspath(__file__.rstrip("co")), resolved)
 
+    def test_resolver_retrieves_requirement_resource_filename(self):
+        # this is slightly different from pkg, because the root package
+        # name must be passed as well, since the package name could be
+        # different from the requirement name.
+        resolved = resource_filename_resolver("req://pydenji/pydenji/test/test_uriresolver.py")
+        self.assertEquals(os.path.abspath(__file__.rstrip("co")), resolved)
 
-if __name__ == '__main__':
-    unittest.main()
 

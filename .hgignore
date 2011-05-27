@@ -13,4 +13,5 @@ dist
 parts
 TODO
 _trial_temp
+.idea/workspace.xml
 

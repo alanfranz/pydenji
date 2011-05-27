@@ -5,10 +5,25 @@
 from unittest import TestCase
 
 from pydenji.appcontext.context import AppContext
-from pydenji.appcontext.aware import is_appcontext_aware
+from pydenji.appcontext.aware import AppContextAware
 from pydenji.config.contextconfig import ContextConfiguration
 from pydenji.config.pythonconfig import singleton, dontconfigure
 from pydenji.config.pythonconfig import Configuration
+
+class TestAppContextAwareness(TestCase):
+    def test_objects_offering_set_app_context_are_appcontext_aware(self):
+        class SomeObj(object):
+            def set_app_context(self, context):
+                pass
+
+        self.assertTrue(isinstance(SomeObj(), AppContextAware))
+
+    def test_objects_not_offering_set_app_context_are_not_appcontext_aware(self):
+        class SomeObj(object):
+            pass
+
+        self.assertFalse(isinstance(SomeObj(), AppContextAware))
+
 
 class TestAppContext(TestCase):
     def test_appcontext_allows_retrieving_by_name(self):

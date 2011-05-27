@@ -41,13 +41,25 @@ class RWResource(object):
         pass
 
     def __getattr__(self, attr):
-        if not self._opened:
-            self._open()
+        self._ensure_open()
         return getattr(self._file_obj, attr)
 
-    def _open(self):
-        self._file_obj = self._opener(self.filename, self._mode, self._buffering)
-        self._opened = True
+    def __iter__(self):
+        self._ensure_open()
+        return iter(self._file_obj)
+
+    def __enter__(self):
+        self._ensure_open()
+        return self._file_obj.__enter__()
+
+    def __exit__(self, t, v, tb):
+        self._ensure_open()
+        return self._file_obj.__exit__(t, v, tb)
+
+    def _ensure_open(self):
+        if not self._opened:
+            self._file_obj = self._opener(self.filename, self._mode, self._buffering)
+            self._opened = True
 
     @property
     def mode(self):

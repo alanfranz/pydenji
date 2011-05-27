@@ -75,6 +75,19 @@ class TestScopeDecorators(TestCase):
         f = prototype(self.func)
         self.assertEquals([1,2,3], [f(None), f(None), f(None)])
 
+    def test_prototype_factory_returns_factory(self):
+        f = prototype.factory(self.func)()
+        self.assertEquals([1,2,3], [f(None), f(None), f(None)])
+
+    def test_prototype_factory_accepts_partial_arguments(self):
+        def func(a, b):
+            return a + b
+
+        f = prototype.factory(func)(a=1)
+
+        self.assertEquals([2, 3, 4], [f(b=1), f(b=2), f(b=3)])
+        
+
     def test_prototype_configures_object(self):
         f = prototype(self.func)
         self.assertTrue(is_object_factory(f))
@@ -82,6 +95,7 @@ class TestScopeDecorators(TestCase):
     def test_prototype_hints_for_lazy_instantiation(self):
         f = prototype(self.func)
         self.assertFalse(is_eager(f))
+
 
     def test_singleton_caches_first_returned_object(self):
         f = singleton(self.func)
@@ -106,3 +120,5 @@ class TestScopeDecorators(TestCase):
     def test_lazy_singleton_hints_for_lazy_instantiation(self):
         f = singleton.lazy(self.func)
         self.assertFalse(is_eager(f))
+        
+

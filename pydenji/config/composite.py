@@ -3,7 +3,7 @@
 # (C) 2010 Alan Franzoni
 
 from pydenji.config.pythonconfig import is_object_factory, dontconfigure
-from pydenji.appcontext.aware import is_appcontext_aware
+from pydenji.appcontext.aware import AppContextAware
 
 class NamingClashException(Exception):
     def __init__(self, clashing_attr, last_config):
@@ -40,7 +40,7 @@ class CompositeConfig(object):
     @dontconfigure
     def set_app_context(self, context):
         for config in self._pydenji__CONFIGURATIONS:
-            if is_appcontext_aware(config):
+            if isinstance(config, AppContextAware):
                     config.set_app_context(context)
 
 

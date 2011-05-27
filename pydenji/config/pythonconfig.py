@@ -5,7 +5,6 @@
 from functools import partial
 from types import UnboundMethodType
 
-from pydenji.appcontext.aware import is_appcontext_aware
 from pydenji._aop.intercept import intercept
 from pydenji.placeholders import Placeholder
 
@@ -59,6 +58,16 @@ def prototype(func):
     setattr(f, _SHOULD_CONFIGURE, False)
     return f
 
+def _prototype_factory(func):
+    def f(*args, **kwargs):
+        return partial(func, *args, **kwargs)
+    setattr(f, _CONFIGURED_OBJECT_FACTORY, True)
+    setattr(f, _INSTANTIATE_EAGERLY, False)
+    setattr(f, _SHOULD_CONFIGURE, False)
+    return f
+
+prototype.factory = _prototype_factory
+    
 def dontconfigure(func):
     def f(*args, **kwargs):
         return func(*args, **kwargs)
