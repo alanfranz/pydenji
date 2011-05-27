@@ -3,7 +3,7 @@
 
 from unittest import TestCase
 
-from pydenji.config.pythonconfig import Configuration, prototype, singleton, dontconfigure
+from pydenji.config.pythonconfig import provide_all_singletons, prototype, singleton, dontconfigure
 from pydenji.config.pythonconfig import is_object_factory, is_eager, _CONFIGURED_OBJECT_FACTORY
 
 class TestConfig(TestCase):
@@ -12,7 +12,7 @@ class TestConfig(TestCase):
         class Simple(object):
             def public(self):
                 pass
-        self.conf = Configuration(Simple, config_recorder.append)
+        self.conf = provide_all_singletons(Simple, config_recorder.append)
         self.assert_(Simple.public in config_recorder, "public was not configured.")
 
     def test_config_doesnt_configure_private_methods(self):
@@ -20,7 +20,7 @@ class TestConfig(TestCase):
             def _private(self):
                 pass
         config_recorder = []
-        self.conf = Configuration(Simple, config_recorder.append)
+        self.conf = provide_all_singletons(Simple, config_recorder.append)
         self.assert_(not config_recorder)
 
     def test_config_doesnt_configure_dontconfigure_methods(self):
@@ -29,7 +29,7 @@ class TestConfig(TestCase):
             def public(self):
                 pass
         config_recorder = []
-        self.conf = Configuration(Simple, config_recorder.append)
+        self.conf = provide_all_singletons(Simple, config_recorder.append)
         self.assert_(not config_recorder)
 
     def test_config_doesnt_reconfigure_already_configured_object(self):
@@ -40,7 +40,7 @@ class TestConfig(TestCase):
             setattr(already_configured, _CONFIGURED_OBJECT_FACTORY, True)
 
         config_recorder = []
-        self.conf = Configuration(Simple, config_recorder.append)
+        self.conf = provide_all_singletons(Simple, config_recorder.append)
         self.assert_(not config_recorder)
 
     def test_prototype_factory_works_without_parameters(self):

@@ -84,6 +84,8 @@ def _to_be_configured(clsattr, attrvalue):
         should_be_configured(attrvalue))
 
 # TODO: this function means nothing, rename it.
+# TODO: make it work so that functions directly in the class
+# dict are wrapped with a singleton.
 def _configure_with(cls, configure_with):
     configured_dict = {}
     for clsattr in dir(cls):
@@ -92,7 +94,7 @@ def _configure_with(cls, configure_with):
             configured_dict[clsattr] = configure_with(attrvalue)
     return configured_dict
 
-def Configuration(cls, configure_with=singleton, suffix=""):
+def provide_all_singletons(cls, configure_with=singleton, suffix=""):
     """
     Makes all public, unwrapped methods *eager singletons* by default.
     Also, after instantiation a "params" instance attribute will be set -

@@ -3,7 +3,7 @@
 # (C) 2010 Alan Franzoni
 
 from pydenji.appcontext.aware import AppContextAware
-from pydenji.config.pythonconfig import Configuration
+from pydenji.config.pythonconfig import provide_all_singletons
 from pydenji.config.pythonconfig import singleton
 
 
@@ -24,7 +24,7 @@ def ContextConfiguration(cls, configure_with=singleton, suffix=""):
     Just like Configuration, but any unfound factory will be looked up in the app context.
     """
     
-    ConfigClass = Configuration(cls, configure_with, suffix)
+    ConfigClass = provide_all_singletons(cls, configure_with, suffix)
     # it might be appcontext aware but we
     # could not detect it without ABCs...
     # TODO: think about that.

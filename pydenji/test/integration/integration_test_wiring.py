@@ -15,14 +15,14 @@ from pydenji.config.contextconfig import ContextConfiguration
 from pydenji.appcontext.context import AppContext
 from pydenji.userproperties.mapping import inject_properties_from
 from pydenji.userproperties.overrider import override_with
-from pydenji.config.pythonconfig import Configuration, prototype, singleton, dontconfigure
+from pydenji.config.pythonconfig import provide_all_singletons, prototype, singleton, dontconfigure
 from pydenji.uriresolver import resource_filename_resolver as rfr
 from pydenji.placeholders import Placeholder
 
 
 @inject_properties_from(rfr("pkg://pydenji/test/integration/resources/inject.conf"))
 @override_with(rfr("pkg://pydenji/test/integration/resources/propertyconf.properties"))
-@Configuration
+@provide_all_singletons
 class MyRemoteFetchService(object):
     target_address = Placeholder("target_address")
 

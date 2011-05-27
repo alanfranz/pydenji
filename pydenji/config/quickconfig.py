@@ -3,7 +3,7 @@
 # (C) 2010 Alan Franzoni
 
 from pydenji.resourceloader import ResourceAccessError
-from pydenji.config.pythonconfig import Configuration
+from pydenji.config.pythonconfig import provide_all_singletons
 from pydenji.userproperties.mapping import inject_properties_from
 from pydenji.userproperties.overrider import override_with
 from pydenji.resourceloader import ReadResource, ResourceAccessError
@@ -18,7 +18,7 @@ class QuickConfig(object):
         self._ignore_missing = ignore_missing
 
     def __call__(self, config_cls):
-        return self._get_injector()(self._get_overrider()(Configuration(config_cls)))
+        return self._get_injector()(self._get_overrider()(provide_all_singletons(config_cls)))
 
     def _get_injector(self):
         prop_resources = []
