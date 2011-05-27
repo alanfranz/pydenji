@@ -55,11 +55,10 @@ class AppContext(object):
         # this way the set_app_context() method will be called multiple times,
         # even though the object is a singleton. While it should make no harm,
         # we should think about it, might it do any harm?
-        return factory(*args, **kwargs)
-
-#        if isinstance(obj, AppContextAware):
-#            obj.set_app_context(self)
-        #return obj
+        obj = factory(*args, **kwargs)
+        if isinstance(obj, AppContextAware):
+            obj.set_app_context(self)
+        return obj
 
 #    @staticmethod
 #    def _get_all_factories(config):

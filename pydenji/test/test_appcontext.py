@@ -23,6 +23,19 @@ class TestAppContext(TestCase):
         self.assertRaises(UnknownProviderException, self.appcontext.provide, "noname")
 
 
+    def test_appcontext_is_set_on_aware_objects(self):
+
+        class SomeObj(object):
+            app_context = None
+            def set_app_context(self, context):
+                self.app_context = context
+
+        self.appcontext.register("someobj", SomeObj)
+
+        obj = self.appcontext.provide("someobj")
+        self.assertTrue(self.appcontext is obj.app_context, "context wasn't injected correctly!")
+
+
 class TestAppContextAwareness(TestCase):
     def test_objects_offering_set_app_context_are_appcontext_aware(self):
         class SomeObj(object):
@@ -36,6 +49,8 @@ class TestAppContextAwareness(TestCase):
             pass
 
         self.assertFalse(isinstance(SomeObj(), AppContextAware))
+
+
 #
 #
 #class TestAppContext(TestCase):
@@ -111,7 +126,12 @@ class TestAppContextAwareness(TestCase):
 #        context = AppContext(conf)
 #        self.assertEquals([], c)
 #
-#    def test_appcontext_gets_injected_on_aware_objects(self):
+#
+#        MockConf = Configuration(MockConf)
+#
+#        context = AppContext(MockConf)
+#        aware = context.provide("appcontextaware")
+#        self.assertTrue(context is aware.app_context, "context wasn't injected correctly!")    def test_appcontext_gets_injected_on_aware_objects(self):
 #        # TODO: think whether we need to use an ABC instead or as well.
 #        class AppAwareObject(object):
 #            app_context = None
@@ -124,24 +144,7 @@ class TestAppContextAwareness(TestCase):
 #            @singleton
 #            def appcontextaware(self):
 #                return AppAwareObject()
-#        MockConf = Configuration(MockConf)
 #
-#        context = AppContext(MockConf)
-#        aware = context.provide("appcontextaware")
-#        self.assertTrue(context is aware.app_context, "context wasn't injected correctly!")
-#
-#    def test_appcontext_gets_injected_on_aware_configuration_objects(self):
-#
-#        class MockConf(object):
-#            @dontconfigure
-#            def set_app_context(self, context):
-#                self.app_context = context
-#
-#        MockConf = Configuration(MockConf)
-#
-#        conf = MockConf
-#        context = AppContext(conf)
-#        self.assertTrue(context is conf.app_context, "context wasn't injected correctly!")
 #
 #
 #class TestGlobalConfig(TestCase):
