@@ -1,6 +1,6 @@
 PYTHON=python
 
-.PHONY : buildout clean distclean release 
+.PHONY : buildout clean distclean release test integrationtest
 
 buildout: .installed.cfg
 
@@ -17,9 +17,16 @@ clean:
 distclean: clean
 		rm -rf bin eggs develop-eggs .installed.cfg parts
 
-release: clean buildout
-		[ "" == "`hg status`" ] || ( echo "Working copy must be clean in order to perform a release." ; exit 1 )
-		bin/testunits 
-		bin/integrationtests
-		bin/buildout install releaser
-		bin/fullrelease
+test: buildout
+	bin/testunits
+
+integrationtest: buildout
+	bin/integrationtests
+
+release: clean buildout test integrationtest
+        [ "" == "`hg status`" ] || ( echo "Working copy must be clean in order to perform a release." ; exit 1 )
+        rm -f setup.cfg
+        hg tag `$(PYTHON) setup.py --version`
+        bin/buildout setup . clean register sdist upload
+        hg revert setup.cfg
+        echo "Now pull up version string!"
