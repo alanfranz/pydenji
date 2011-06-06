@@ -1,6 +1,6 @@
 from unittest import TestCase
 from pydenji.config.pythonconfig import Configuration
-from pydenji.config.provider import singleton, prototype
+from pydenji.config.provider import singleton, prototype, provider
 
 class TestDuckConfiguration(TestCase):
     def test_any_object_with_get_public_providers_can_be_a_configuration(self):
@@ -12,11 +12,11 @@ class TestDuckConfiguration(TestCase):
         self.assertTrue(isinstance(Any(), Configuration))
 
 class MyConf(Configuration):
-    @prototype
+    @provider.scope(prototype)
     def some_object(self, a):
         return a
 
-    @singleton
+    @provider.scope(singleton)
     def my_singleton(self):
         return 2
 

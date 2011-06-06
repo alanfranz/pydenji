@@ -49,14 +49,19 @@ def singleton(func, eager=True):
     return singleton_wrapped
 
 singleton.lazy = partial(singleton, eager=False)
+singleton.default_eager = True
 
-def prototype(func):
+def prototype(func, eager=False):
+    if eager:
+        raise ValueError, "eager instantiation makes no sense for prototype scope."
     def f(*args, **kwargs):
         return func(*args, **kwargs)
     setattr(f, _CONFIGURED_OBJECT_FACTORY, True)
     setattr(f, _INSTANTIATE_EAGERLY, False)
     setattr(f, _SHOULD_CONFIGURE, False)
     return f
+
+prototype.default_eager = False
 
 def _prototype_factory(func):
     def f(*args, **kwargs):
@@ -113,6 +118,20 @@ def provide_all_singletons(cls, configure_with=singleton, suffix=""):
     cls_type = type(cls)
     return cls_type(cls.__name__ + suffix, (cls, ), configured_dict)
 
+
+class Provider(object):
+    def __init__(self):
+        self._scope = singleton
+        self._eager = None
+
+    def scope(self, scope):
+        self._scope = scope
+        return self
+
+    def __call__(self, func):
+        return self._scope(func, self._eager or self._scope.default_eager)
+
+provider = Provider()
 
 
 
