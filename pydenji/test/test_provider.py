@@ -3,7 +3,7 @@
 
 from unittest import TestCase
 
-from pydenji.config.provider import provide_all_singletons, prototype, singleton, dontconfigure
+from pydenji.config.provider import provide_all_singletons, prototype, singleton, dontconfigure, provider
 from pydenji.config.provider import is_object_factory, is_eager, _CONFIGURED_OBJECT_FACTORY
 
 class TestConfig(TestCase):
@@ -45,7 +45,7 @@ class TestConfig(TestCase):
 
     def test_prototype_factory_works_without_parameters(self):
         class Prototypal(object):
-            @prototype
+            @provider(scope=prototype)
             def factory(self):
                 return 1
 
@@ -54,7 +54,7 @@ class TestConfig(TestCase):
 
     def test_lazy_factory_works_without_parameters(self):
         class Lazy(object):
-            @singleton.lazy
+            @provider(scope=prototype, lazy_init=True)
             def factory(self):
                 return 1
 

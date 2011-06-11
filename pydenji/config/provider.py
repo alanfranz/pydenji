@@ -49,7 +49,7 @@ def singleton(func, eager=True):
     return singleton_wrapped
 
 singleton.lazy = partial(singleton, eager=False)
-singleton.default_eager = True
+singleton.default_lazy_init = False
 
 def prototype(func, eager=False):
     if eager:
@@ -61,7 +61,7 @@ def prototype(func, eager=False):
     setattr(f, _SHOULD_CONFIGURE, False)
     return f
 
-prototype.default_eager = False
+prototype.default_lazy_init = True
 
 def _prototype_factory(func):
     def f(*args, **kwargs):
@@ -120,18 +120,17 @@ def provide_all_singletons(cls, configure_with=singleton, suffix=""):
 
 
 class Provider(object):
-    def __init__(self):
-        self._scope = singleton
-        self._eager = None
-
-    def scope(self, scope):
+    def __init__(self, scope=singleton, lazy_init=None):
         self._scope = scope
-        return self
+        if lazy_init is None:
+            self._eager = not scope.default_lazy_init
+        else:
+            self._eager = not lazy_init
 
     def __call__(self, func):
-        return self._scope(func, self._eager or self._scope.default_eager)
+        return self._scope(func, self._eager)
 
-provider = Provider()
+provider = Provider
 
 
 

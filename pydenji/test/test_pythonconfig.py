@@ -12,11 +12,11 @@ class TestDuckConfiguration(TestCase):
         self.assertTrue(isinstance(Any(), Configuration))
 
 class MyConf(Configuration):
-    @provider.scope(prototype)
+    @provider(scope=prototype)
     def some_object(self, a):
         return a
 
-    @provider.scope(singleton)
+    @provider(scope=singleton)
     def my_singleton(self):
         return 2
 
