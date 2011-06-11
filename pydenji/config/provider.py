@@ -33,12 +33,12 @@ class _Maybe(object):
 
 def singleton(func, eager=True):
     maybevalue = _Maybe()
-    def singleton_wrapped(self, *args, **kwargs):
-        if args or kwargs:
+    def singleton_wrapped(*args, **kwargs):
+        if args[1:] or kwargs:
             raise TypeError, "Singleton mustn't take any parameter. Use per-instance config instead."
 
         if not maybevalue.has_value:
-            maybevalue.value = func(self)
+            maybevalue.value = func(*args)
             maybevalue.has_value = True
         return maybevalue.value
 
