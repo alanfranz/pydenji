@@ -46,10 +46,10 @@ class AppContext(object):
             raise UnknownProviderException, "No provider was configured for '%s'" % name
         return self._get_instance(provider, *args, **kwargs)
     
-#    def _start(self, names_factories):
-#        for factory in names_factories.values():
-#            if is_eager(factory):
-#                self._get_instance(factory)
+    def start(self):
+        for provider in self._names_providers.values():
+            if is_eager(provider):
+                self._get_instance(provider)
 
     def _get_instance(self, factory, *args, **kwargs):
         # this way the set_app_context() method will be called multiple times,

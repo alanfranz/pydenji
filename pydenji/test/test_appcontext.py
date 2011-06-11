@@ -6,9 +6,8 @@ from unittest import TestCase
 
 from pydenji.appcontext.context import AppContext, UnknownProviderException
 from pydenji.appcontext.aware import AppContextAware
-from pydenji.config.contextconfig import ContextConfiguration
-from pydenji.config.provider import singleton, dontconfigure
-from pydenji.config.provider import provide_all_singletons
+from pydenji.config.provider import provider
+
 
 
 class TestAppContext(TestCase):
@@ -34,6 +33,18 @@ class TestAppContext(TestCase):
 
         obj = self.appcontext.provide("someobj")
         self.assertTrue(self.appcontext is obj.app_context, "context wasn't injected correctly!")
+
+    def test_eager_providers_are_created_when_starting_app_context(self):
+        called = []
+        self.appcontext.register("singleton", provider()(lambda: called.append(True)))
+        self.appcontext.start()
+        self.assertTrue(called)
+
+    def test_lazy_providers_are_not_created_when_starting_app_context(self):
+        called = []
+        self.appcontext.register("singletonlazy", provider(lazy_init=True)(lambda: called.append(True)))
+        self.appcontext.start()
+        self.assertFalse(called)
 
 
 class TestAppContextAwareness(TestCase):
