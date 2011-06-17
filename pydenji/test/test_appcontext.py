@@ -4,7 +4,7 @@
 
 from unittest import TestCase
 
-from pydenji.appcontext.context import AppContext, UnknownProviderException
+from pydenji.appcontext.context import AppContext, UnknownProviderException, AlreadyRegistered
 from pydenji.appcontext.aware import AppContextAware
 from pydenji.config.provider import provider
 
@@ -45,6 +45,10 @@ class TestAppContext(TestCase):
         self.appcontext.register("singletonlazy", provider(lazy_init=True)(lambda: called.append(True)))
         self.appcontext.start()
         self.assertFalse(called)
+
+    def test_error_raised_if_multiple_providers_register_with_same_name(self):
+        self.appcontext.register("somename", lambda x,y: x*y)
+        self.assertRaises(AlreadyRegistered, self.appcontext.register, "somename", lambda x,y:x*y)
 
 
 class TestAppContextAwareness(TestCase):

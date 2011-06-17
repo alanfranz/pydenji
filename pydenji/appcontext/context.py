@@ -10,6 +10,8 @@ from pydenji.config.composite import CompositeConfig
 class UnknownProviderException(Exception):
     pass
 
+class AlreadyRegistered(Exception):
+    pass
 
 class AppContext(object):
     def __init__(self):
@@ -17,6 +19,8 @@ class AppContext(object):
 
     def register(self, name, provider):
         # TODO: what to do if there's already a provider for that name?
+        if name in self._names_providers:
+            raise AlreadyRegistered, "'%s' was already registered!"
         self._names_providers[name] = provider
 
     def __contains__(self, key):
