@@ -18,7 +18,7 @@ class AppContext(object):
         self._names_providers = {}
 
     def register(self, name, provider):
-        # TODO: what to do if there's already a provider for that name?
+        # TODO: limit bean names.
         if name in self._names_providers:
             raise AlreadyRegistered, "'%s' was already registered!"
         self._names_providers[name] = provider
