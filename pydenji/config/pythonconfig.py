@@ -7,6 +7,7 @@ from pydenji.config.provider import dontconfigure, is_object_factory
 
 class Configuration(object):
     __metaclass__ = DuckABCMeta
+    # TODO: we might stop people from using get_... names?
 
     def get_public_providers(self):
         """
@@ -18,5 +19,10 @@ class Configuration(object):
             if is_object_factory(value):
                 names_providers[attr] = value
         return names_providers
+
+    @property
+    def get_name(self):
+        return self.__class__.__name__
+
 
 
