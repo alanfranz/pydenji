@@ -23,6 +23,23 @@ class AppContext(object):
             raise AlreadyRegistered, "'%s' was already registered!"
         self._names_providers[name] = provider
 
+    # we'll do this right now, in the future we might try with a ducktype-based
+    # overloading.
+    def register_config(self, config_class):
+        """
+        registering a config registers a de-facto singleton bean
+        with the same name as the config, AND all providers for that config.
+
+        we want the config class to be registered, not an instance, because
+        we may want or need to wire it.
+
+        the INSTANCE will be registered with such name.
+        """
+        config = self._get_instance(config_class)
+        # TODO: use an internal method.
+        self.register(config.get_name(), lambda:config)
+
+
     def __contains__(self, key):
         return key in self._names_providers
 

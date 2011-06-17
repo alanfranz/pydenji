@@ -9,6 +9,13 @@ from pydenji.appcontext.aware import AppContextAware
 from pydenji.config.provider import provider
 
 
+class MockConfig(object):
+    def get_name(self):
+        return "MockName"
+
+    def get_public_providers(self):
+        return {}
+
 
 class TestAppContext(TestCase):
     def setUp(self):
@@ -49,6 +56,12 @@ class TestAppContext(TestCase):
     def test_error_raised_if_multiple_providers_register_with_same_name(self):
         self.appcontext.register("somename", lambda x,y: x*y)
         self.assertRaises(AlreadyRegistered, self.appcontext.register, "somename", lambda x,y:x*y)
+
+    def test_register_config_registers_config_class_as_bean(self):
+        self.appcontext.register_config(MockConfig)
+        self.assertTrue(isinstance(self.appcontext.provide("MockName"), MockConfig))
+
+        
 
 
 class TestAppContextAwareness(TestCase):
