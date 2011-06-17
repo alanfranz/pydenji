@@ -8,7 +8,6 @@ from pydenji.config.provider import dontconfigure, is_object_factory
 class Configuration(object):
     __metaclass__ = DuckABCMeta
 
-    #@dontconfigure
     def get_public_providers(self):
         """
         @rtype dict name:provider
