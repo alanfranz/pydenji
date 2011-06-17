@@ -14,30 +14,16 @@ class UnknownProviderException(Exception):
 class AppContext(object):
     def __init__(self):
         self._names_providers = {}
-#        pass
-
-#                 *configurations):
-#        self._names_factories = {}
-#        for conf in configurations:
-#            self.register(conf.__name__, conf)
-        #self._start(self._names_factories)
 
     def register(self, name, provider):
         # TODO: what to do if there's already a provider for that name?
         self._names_providers[name] = provider
-        # this is something we do for configs, makes no sense for other
-        # object, we'd probably MUCH better create an interface for configuration
-        # objects.
-        #names_factories = self._get_all_factories(provider)
-        # TODO: this does not check for overwrites, should it?
-        #self._names_factories.update(names_factories)
 
     def __contains__(self, key):
         return key in self._names_providers
 
     def __iter__(self):
         return self._names_providers.iterkeys()
-
 
     def provide(self, name, *args, **kwargs):
         try:
