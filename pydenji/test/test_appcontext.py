@@ -6,7 +6,7 @@ from unittest import TestCase
 
 from pydenji.appcontext.context import AppContext, UnknownProviderException, AlreadyRegistered
 from pydenji.appcontext.aware import AppContextAware
-from pydenji.config.provider import provider, provider
+from pydenji.config.provider import provider
 
 
 
@@ -22,7 +22,6 @@ class MockConfig(object):
 @provider()
 def mock_config_provider():
     return MockConfig()
-
 
 class TestAppContext(TestCase):
     def setUp(self):
