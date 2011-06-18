@@ -61,7 +61,7 @@ class TestAppContext(TestCase):
         self.appcontext.register_config(MockConfig)
         self.assertTrue(isinstance(self.appcontext.provide("MockName"), MockConfig))
 
-    def test_register_config_registers_config_class_providers_as_providers(self):
+    def test_register_config_registers_config_class_providers_as_appcontext_providers(self):
         self.appcontext.register_config(MockConfig)
         self.assertTrue(self.appcontext.provide("something"))
 
