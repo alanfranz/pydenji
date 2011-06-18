@@ -6,13 +6,11 @@ from unittest import TestCase
 
 from pydenji.appcontext.context import AppContext, UnknownProviderException, AlreadyRegistered
 from pydenji.appcontext.aware import AppContextAware
-from pydenji.config.provider import provider
+from pydenji.config.provider import provider, set_singleton
 
 
+@set_singleton
 class MockConfig(object):
-    def get_name(self):
-        return "MockName"
-
     def get_public_providers(self):
         return {"something": lambda:True}
 
@@ -57,12 +55,9 @@ class TestAppContext(TestCase):
         self.appcontext.register("somename", lambda x,y: x*y)
         self.assertRaises(AlreadyRegistered, self.appcontext.register, "somename", lambda x,y:x*y)
 
-    def test_register_config_registers_config_class_as_provider(self):
-        self.appcontext.register_anonymous(MockConfig)
-        self.assertTrue(isinstance(self.appcontext.provide("MockName"), MockConfig))
-
     def test_register_config_registers_config_class_providers_as_appcontext_providers(self):
         self.appcontext.register_anonymous(MockConfig)
+        self.appcontext.start()
         self.assertTrue(self.appcontext.provide("something"))
 
 

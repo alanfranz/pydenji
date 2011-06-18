@@ -1,10 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # (C) 2010 Alan Franzoni.
+from random import choice
 
 from pydenji.config.provider import is_object_factory, is_eager
 from pydenji.appcontext.aware import AppContextAware
+from pydenji.config.pythonconfig import Configuration
 from pydenji.config.composite import CompositeConfig
+
 
 
 class UnknownProviderException(Exception):
@@ -16,6 +19,7 @@ class AlreadyRegistered(Exception):
 class AppContext(object):
     def __init__(self):
         self._names_providers = {}
+        self._anon_index = 1
 
     def register(self, name, provider):
         # TODO: limit bean names.
@@ -25,27 +29,18 @@ class AppContext(object):
 
     # we'll do this right now, in the future we might try with a ducktype-based
     # overloading.
-    def register_anonymous(self, config_class):
-        """
-        registering a config registers a de-facto singleton bean
-        with the same name as the config, AND all providers for that config.
+    def register_anonymous(self, provider):
+        self._add_anonymous_provider(provider)
 
-        we want the config class to be registered, not an instance, because
-        we may want or need to wire it.
-
-        the INSTANCE will be registered with such name.
-        """
-        config = self._get_instance(config_class)
-        # TODO: use an internal method.
-        self.register(config.get_name(), lambda:config)
-        for name, provider in config.get_public_providers().items():
-            self.register(name, provider)
+    def _add_anonymous_provider(self, provider):
+        self.register("_ANON_%s" % self._anon_index, provider)
+        self._anon_index += 1
 
     def __contains__(self, key):
         return key in self._names_providers
 
     def __iter__(self):
-        return self._names_providers.iterkeys()
+        return [key for key in self._names_providers.iterkeys() if not key.startswith("_ANON")]
 
     def provide(self, name, *args, **kwargs):
         try:
@@ -66,7 +61,13 @@ class AppContext(object):
         obj = factory(*args, **kwargs)
         if isinstance(obj, AppContextAware):
             obj.set_app_context(self)
+        if isinstance(obj, Configuration):
+            self._register_config_providers(obj)
         return obj
+
+    def _register_config_providers(self, config):
+        for name, provider in config.get_public_providers().items():
+             self.register(name, provider)
 
 
 

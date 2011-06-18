@@ -3,8 +3,9 @@
 
 from ducktypes.ducktype import DuckABCMeta
 
-from pydenji.config.provider import dontconfigure, is_object_factory
+from pydenji.config.provider import set_singleton, is_object_factory
 
+@set_singleton
 class Configuration(object):
     __metaclass__ = DuckABCMeta
     # TODO: we might stop people from using get_... names?
@@ -19,10 +20,6 @@ class Configuration(object):
             if is_object_factory(value):
                 names_providers[attr] = value
         return names_providers
-
-    @property
-    def get_name(self):
-        return self.__class__.__name__
 
 
 
