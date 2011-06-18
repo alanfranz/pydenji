@@ -57,11 +57,12 @@ class TestAppContext(TestCase):
         self.appcontext.register("somename", lambda x,y: x*y)
         self.assertRaises(AlreadyRegistered, self.appcontext.register, "somename", lambda x,y:x*y)
 
-    def test_register_config_registers_config_class_as_bean(self):
+    def test_register_config_registers_config_class_as_provider(self):
         self.appcontext.register_config(MockConfig)
         self.assertTrue(isinstance(self.appcontext.provide("MockName"), MockConfig))
 
-        
+
+
 
 
 class TestAppContextAwareness(TestCase):
