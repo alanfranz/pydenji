@@ -24,7 +24,7 @@ class AppContext(object):
     def register(self, name, provider):
         # TODO: limit bean names.
         if name in self._names_providers:
-            raise AlreadyRegistered, "'%s' was already registered!"
+            raise AlreadyRegistered, "'%s' was already registered!" % name
         self._names_providers[name] = provider
 
     # we'll do this right now, in the future we might try with a ducktype-based
@@ -67,8 +67,14 @@ class AppContext(object):
 
     def _register_config_providers(self, config):
         for name, provider in config.get_public_providers().items():
-             self.register(name, provider)
-
+            # this can happen if a config is requested multiple times,
+            # but what happens if such name was initially registered by
+            # somebody else?
+            # TODO: reconsider the issue of colliding names.
+            try:
+                self.register(name, provider)
+            except AlreadyRegistered:
+                pass
 
 
 
