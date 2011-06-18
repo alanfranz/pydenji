@@ -42,11 +42,15 @@ def singleton(func, eager=True):
             maybevalue.has_value = True
         return maybevalue.value
 
-    setattr(singleton_wrapped, _INSTANTIATE_EAGERLY, eager)
-    setattr(singleton_wrapped, _CONFIGURED_OBJECT_FACTORY, True)
-    setattr(singleton_wrapped, _SHOULD_CONFIGURE, False)
+    set_singleton(singleton_wrapped, eager)
 
     return singleton_wrapped
+
+def set_singleton(obj, eager):
+    setattr(obj, _INSTANTIATE_EAGERLY, eager)
+    setattr(obj, _CONFIGURED_OBJECT_FACTORY, True)
+    setattr(obj, _SHOULD_CONFIGURE, False)
+
 
 singleton.lazy = partial(singleton, eager=False)
 singleton.default_lazy_init = False
