@@ -38,6 +38,9 @@ class AppContext(object):
         config = self._get_instance(config_class)
         # TODO: use an internal method.
         self.register(config.get_name(), lambda:config)
+        for name, provider in config.get_public_providers().items():
+            self.register(name, provider)
+
 
 
     def __contains__(self, key):
