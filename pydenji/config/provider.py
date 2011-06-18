@@ -46,7 +46,7 @@ def singleton(func, eager=True):
 
     return singleton_wrapped
 
-def set_singleton(obj, eager):
+def set_singleton(obj, eager=True):
     setattr(obj, _INSTANTIATE_EAGERLY, eager)
     setattr(obj, _CONFIGURED_OBJECT_FACTORY, True)
     setattr(obj, _SHOULD_CONFIGURE, False)
