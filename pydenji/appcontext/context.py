@@ -25,7 +25,7 @@ class AppContext(object):
 
     # we'll do this right now, in the future we might try with a ducktype-based
     # overloading.
-    def register_config(self, config_class):
+    def register_anonymous(self, config_class):
         """
         registering a config registers a de-facto singleton bean
         with the same name as the config, AND all providers for that config.
@@ -40,8 +40,6 @@ class AppContext(object):
         self.register(config.get_name(), lambda:config)
         for name, provider in config.get_public_providers().items():
             self.register(name, provider)
-
-
 
     def __contains__(self, key):
         return key in self._names_providers
