@@ -11,11 +11,11 @@ bin:
 		$(PYTHON) bootstrap.py --distribute
 
 clean:
-		rm -rf _trial_temp build dist *.egg-info
+		rm -rf _trial_temp build dist 
 		find . \( -name "*.pyc" -o -name "*.pyo" \) -exec rm -f {} \;
 
 distclean: clean
-		rm -rf bin eggs develop-eggs .installed.cfg parts
+		rm -rf bin eggs develop-eggs .installed.cfg parts *.egg-info
 
 test: buildout
 	bin/testunits
