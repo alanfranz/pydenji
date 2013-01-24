@@ -24,9 +24,4 @@ integrationtest: buildout
 	bin/integrationtests
 
 release: clean buildout test integrationtest
-		[ "" == "`hg status`" ] || ( echo "Working copy must be clean in order to perform a release." ; exit 1 )
-		rm -f setup.cfg
-		hg tag `$(PYTHON) setup.py --version`
-		bin/buildout setup . clean register sdist upload
-		hg revert setup.cfg
-		echo "Now pull up version string!"
+	bin/fullrelease
