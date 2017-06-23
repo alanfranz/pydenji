@@ -1,27 +1,21 @@
-PYTHON=python
+.PHONY: test clean distclean
 
-.PHONY : buildout clean distclean release test integrationtest
+# override VIRTUALENV or PYTHON as needed. If you override VIRTUALENV
+# PYTHON may not be interpreted, depending on what you set.
+PYTHON ?= $(shell which python2.7)
+VIRTUALENV ?= $(shell which virtualenv) -p $(PYTHON)
+SHELL := /bin/bash
 
-buildout: .installed.cfg
+devenv: setup.py Makefile
+	test -r devenv || $(VIRTUALENV) devenv
+	source devenv/bin/activate ; python devenv/bin/pip install --editable . --upgrade ; python devenv/bin/pip install bpython
+	touch devenv
 
-.installed.cfg: bin buildout.cfg
-		bin/buildout
-
-bin:
-		$(PYTHON) bootstrap.py --distribute
+test: devenv
+	devenv/bin/unit discover -v
 
 clean:
-		rm -rf _trial_temp build dist 
-		find . \( -name "*.pyc" -o -name "*.pyo" \) -exec rm -f {} \;
+	rm -rf tmp build dist
 
 distclean: clean
-		rm -rf bin eggs develop-eggs .installed.cfg parts *.egg-info
-
-test: buildout
-	bin/testunits
-
-integrationtest: buildout
-	bin/integrationtests
-
-release: clean buildout test integrationtest
-	bin/fullrelease
+	rm -rf devenv *.egg-info
