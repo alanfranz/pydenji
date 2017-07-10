@@ -3,7 +3,7 @@
 # (C) 2010 Alan Franzoni
 
 from abc import abstractmethod
-from ducktypes.ducktype import DuckABCMeta
+from pydenji.ducktypes.ducktype import DuckABCMeta
 
 class AppContextAware(object):
     __metaclass__ = DuckABCMeta

@@ -2,3 +2,4 @@
 *.pyo
 devenv/
 *.egg-info
+.idea/

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # (C) 2011 Alan Franzoni.
 
-from ducktypes.ducktype import DuckABCMeta
+from pydenji.ducktypes.ducktype import DuckABCMeta
 
 from pydenji.config.provider import set_singleton, is_object_factory
 
